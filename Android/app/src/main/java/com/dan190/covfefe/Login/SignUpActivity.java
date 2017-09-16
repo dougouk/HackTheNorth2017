@@ -77,7 +77,7 @@ public class SignUpActivity extends AppCompatActivity {
                         }else{
                             Log.d(TAG, "created user");
                             MyApplication.setUser(auth.getCurrentUser());
-                            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                            startActivity(new Intent(SignUpActivity.this, AllowLocationActivity.class));
                         }
                     }
                 });

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.dan190.covfefe.MainActivity;
@@ -32,7 +33,7 @@ public class AllowLocationActivity extends AppCompatActivity {
     ImageView allowImage;
 
     @BindView(R.id.allowButton)
-    ImageView allowButton;
+    Button allowButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +41,11 @@ public class AllowLocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_allow_location);
         ButterKnife.bind(this);
 
+        if(ActivityCompat.checkSelfPermission(MyApplication.getInstance(), Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED){
+            // Permission already granted
+            startMainActivity();
+        }
 
     }
 
@@ -69,5 +75,6 @@ public class AllowLocationActivity extends AppCompatActivity {
 
     private void startMainActivity(){
         startActivity(new Intent(AllowLocationActivity.this, MainActivity.class));
+        finish();
     }
 }

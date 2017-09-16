@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                             Logger.makeToast(getString(R.string.login_failed));
                         }else{
                             MyApplication.setUser(auth.getCurrentUser());
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            startActivity(new Intent(LoginActivity.this, AllowLocationActivity.class));
                         }
                     }
                 });
