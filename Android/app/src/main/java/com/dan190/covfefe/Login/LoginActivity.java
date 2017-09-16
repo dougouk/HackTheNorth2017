@@ -6,14 +6,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.MyApplication;
 import com.dan190.covfefe.R;
 import com.dan190.covfefe.Util.Logger;
+import com.dan190.covfefe.Util.MainSharedPreferences;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -25,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,12 +88,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCancel() {
                 // App code
+                resetViews();
+
             }
 
             @Override
             public void onError(FacebookException exception) {
                 // App code
                 Logger.makeToast(getString(R.string.facebook_login_failed));
+                resetViews();
             }
         });
 
@@ -106,11 +113,16 @@ public class LoginActivity extends AppCompatActivity {
         String email = username.getText().toString();
         String pass = password.getText().toString();
 
+        Log.d(TAG, String.format("email is %s", email));
+        Log.d(TAG, String.format("pass is %s", pass));
+
         if (email.equals("") || pass.equals("")) {
             Logger.makeToast(getString(R.string.fill_out_login_info));
             return;
         }
 
+        progressBar.setVisibility(View.VISIBLE);
+        mainLayout.setAlpha(0.2f);
         MyApplication.getFirebaseAuth().signInWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -120,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                         }else{
                             Logger.makeToast(getString(R.string.login_failed));
                             resetViews();
+                            mainLayout.setAlpha(1f);
                         }
 
                     }
@@ -158,6 +171,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void proceed(){
+
+
         startActivity(new Intent(LoginActivity.this, AllowLocationActivity.class));
         finish();
     }

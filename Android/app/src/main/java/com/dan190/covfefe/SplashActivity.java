@@ -28,69 +28,58 @@ public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_TIMEOUT = 800; //ms
     private static final String TAG = SplashActivity.class.getSimpleName();
 
-    private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        auth = MyApplication.getFirebaseAuth();
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user!=null){
-                    // User is signed in
-                    Log.d(TAG, "signed in");
-                    proceedLogOn();
-                }else{
-                    // User is not signed in
-                    Log.d(TAG, "user not signed in");
+        if(MyApplication.getFirebaseAuth().getCurrentUser()!=null){
+            // User is signed in
+            Log.d(TAG, "signed in");
+            proceedLogOn();
+        }else{
+            // User is not signed in
+            Log.d(TAG, "user not signed in");
 
-                    if(AccessToken.getCurrentAccessToken() == null){
-                        Log.d(TAG, "Facebook not signed in either");
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                                finish();
-                            }
-                        }, SPLASH_TIMEOUT);
-                    }else {
-                        Log.d(TAG, "Facebook already signed on");
-                        AuthCredential authCredential = FacebookAuthProvider.getCredential(AccessToken
-                                .getCurrentAccessToken()
-                                .getToken());
-                        auth.signInWithCredential(authCredential)
-                                .addOnCompleteListener(SplashActivity.this, new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if(task.isSuccessful()){
-                                            proceedLogOn();
-                                        }else{
-                                            Logger.makeToast(getString(R.string.facebook_login_failed));
-                                        }
-                                    }
-                                });
+            if(AccessToken.getCurrentAccessToken() == null){
+                Log.d(TAG, "Facebook not signed in either");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        finish();
                     }
-                }
+                }, SPLASH_TIMEOUT);
+            }else {
+                Log.d(TAG, "Facebook already signed on");
+                AuthCredential authCredential = FacebookAuthProvider.getCredential(AccessToken
+                        .getCurrentAccessToken()
+                        .getToken());
+                MyApplication.getFirebaseAuth().signInWithCredential(authCredential)
+                        .addOnCompleteListener(SplashActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    proceedLogOn();
+                                }else{
+                                    Logger.makeToast(getString(R.string.facebook_login_failed));
+                                }
+                            }
+                        });
             }
-        };
-
+        }
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-        auth.addAuthStateListener(authStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        auth.removeAuthStateListener(authStateListener);
     }
 
     private void proceedLogOn(){

@@ -4,6 +4,8 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.dan190.covfefe.Models.User;
+import com.dan190.covfefe.Util.MainSharedPreferences;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,16 +34,26 @@ public class MyApplication extends Application {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
-                    // Signed out
-                    signOutAndFinish();
-                }else{
                     // Signed in
-                    Log.i(TAG, "User signed in at MainActivity");
+                    Log.i(TAG, "User signed in");
+                    String name = user.getDisplayName();
+                    String email = user.getEmail();
+                    String id = user.getUid();
+                    String photoUrl = "";
+                    User newUser = new User(name, email, id, photoUrl, null);
+                    MainSharedPreferences.emailLogin(MyApplication.getInstance(), newUser);
+
+                }else{
+                    // Signed out
+
+                    signOutAndFinish();
+
                 }
             }
         };
         MyApplication.getFirebaseAuth().addAuthStateListener(authStateListener);
     }
+
 
     public static MyApplication getInstance(){
         return instance;
@@ -52,6 +64,7 @@ public class MyApplication extends Application {
     }
 
     private void signOutAndFinish(){
+        auth.removeAuthStateListener(authStateListener);
         auth.signOut();
         LoginManager.getInstance().logOut();
     }

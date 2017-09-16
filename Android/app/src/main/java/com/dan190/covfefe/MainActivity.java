@@ -14,7 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.dan190.covfefe.Models.User;
+import com.dan190.covfefe.Util.MainSharedPreferences;
 import com.facebook.login.LoginManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +27,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private TextView headerName;
+    private TextView headerContactInfo;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Replace action to create a group!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -49,6 +56,16 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Set username, email and profile picture
+        View headerView = navigationView.getHeaderView(0);
+        headerName = (TextView) headerView.findViewById(R.id.name);
+        headerContactInfo = (TextView) headerView.findViewById(R.id.contactInfo);
+
+        //TODO incorrect display name and email
+        currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
+        headerName.setText(currentUser.getDisplayName());
+        headerContactInfo.setText(currentUser.getEmail());
 
 
     }
@@ -94,6 +111,8 @@ public class MainActivity extends AppCompatActivity
         if(id == R.id.nav_logout){
             // Log out
             signOutAndFinish();
+        }else if (id == R.id.nav_profile){
+            // Edit profile
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
