@@ -7,39 +7,39 @@
 
     <EditText
         android:id="@+id/username"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/login_btn_width"
+        android:layout_height="@dimen/login_btn_height"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/password"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintVertical_chainStyle="packed"
-        android:hint="@string/email"/>
+        android:hint="@string/email"
+        style="@style/LoginEdit"/>
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/login_btn_width"
+        android:layout_height="@dimen/login_btn_height"
         android:inputType="textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username"
         app:layout_constraintBottom_toTopOf="@+id/password_repeat"
-        app:layout_constraintHorizontal_bias="0.0"
-        android:hint="@string/password"/>
+        android:hint="@string/password"
+        style="@style/LoginEdit"/>
 
     <EditText
         android:id="@+id/password_repeat"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/login_btn_width"
+        android:layout_height="@dimen/login_btn_height"
         android:inputType="textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
         app:layout_constraintBottom_toTopOf="@+id/signup"
-        app:layout_constraintHorizontal_bias="0.0"
-        android:hint="@string/password_repeat"/>
+        android:hint="@string/password_repeat"
+        style="@style/LoginEdit"/>
 
     <Button
         android:id="@+id/signup"
@@ -49,8 +49,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_repeat"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.49"
         android:text="@string/signup"
-        android:background="@drawable/btn_login"/>
+        android:background="@drawable/btn_login"
+        style="@style/LoginButton"/>
 
 </android.support.constraint.ConstraintLayout>

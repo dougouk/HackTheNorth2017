@@ -124,7 +124,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.login)
     public void login(){
-        verifyForm();
         String email = username.getText().toString();
         String pass = password.getText().toString();
 
@@ -152,10 +151,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 });
-    }
-
-    private void verifyForm(){
-
     }
 
     @Override

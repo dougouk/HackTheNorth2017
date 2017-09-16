@@ -7,9 +7,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.BaseKeyListener;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -34,10 +32,10 @@ import static android.view.View.GONE;
 public class EditProfileActivity extends AppCompatActivity {
     private static final String TAG = EditProfileActivity.class.getSimpleName();
 
-    @BindView(R.id.userId)
+    @BindView(R.id.currentDisplayName)
     TextView userId;
 
-    @BindView(R.id.displayName)
+    @BindView(R.id.newDisplayName)
     EditText newNameEditText;
 
     @BindView(R.id.changeDisplayName)
