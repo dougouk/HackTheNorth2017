@@ -51,7 +51,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Set up back arrow in action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override

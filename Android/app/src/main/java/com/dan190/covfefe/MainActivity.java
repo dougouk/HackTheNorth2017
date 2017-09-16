@@ -1,5 +1,6 @@
 package com.dan190.covfefe;
 
+import android.app.Application;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import com.dan190.covfefe.Util.MainSharedPreferences;
 import com.facebook.login.LoginManager;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,6 +36,10 @@ public class MainActivity extends AppCompatActivity
     private TextView headerContactInfo;
     private User currentUser;
 
+    // Write a message to the database
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        MyDatabase mApp = ((MyDatabase)getApplicationContext());
+        String globalVarValue = mApp.getGlobalVal();
+
+        // Write a message to the database
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("message");
 /*
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -172,5 +186,17 @@ public class MainActivity extends AppCompatActivity
         MyApplication.getFirebaseAuth().signOut();
         LoginManager.getInstance().logOut();
         finish();
+    }
+}
+
+class MyDatabase extends Application {
+    private String mGlobalVal;
+
+    public String getGlobalVal() {
+        return mGlobalVal;
+    }
+
+    public void setGlobalVal(String str) {
+        mGlobalVal = str;
     }
 }
