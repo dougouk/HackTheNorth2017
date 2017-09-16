@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.fab);
         FloatingActionButton createGroup = new FloatingActionButton(MyApplication.getInstance());
-        createGroup.setImageBitmap(BitmapFactory.decodeResource(MyApplication.getInstance().getResources(), R.drawable.ic_add_circle_black_24dp));
+        createGroup.setIconDrawable(getDrawable(R.drawable.ic_add_circle_black_24dp));
         createGroup.setEnabled(true);
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         FloatingActionButton joinGroup = new FloatingActionButton(MyApplication.getInstance());
-        joinGroup.setImageBitmap(BitmapFactory.decodeResource(MyApplication.getInstance().getResources(), R.drawable.ic_exit_to_app_black_24dp));
+        joinGroup.setIconDrawable(getDrawable(R.drawable.ic_exit_to_app_black_24dp));
         joinGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
