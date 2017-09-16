@@ -6,11 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.R;
@@ -59,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     Button login;
 
     @BindView(R.id.signup)
-    Button singup;
+    TextView signup;
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
@@ -102,12 +106,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        SpannableString signupMsg = new SpannableString("Don't have an account, SIGN UP");
+        ClickableSpan signupSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            }
+        };
+
+        signupMsg.setSpan(signupSpan, 23, 30, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    @OnClick(R.id.signup)
-    public void signUp(){
-        startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
-    }
 
     @OnClick(R.id.login)
     public void login(){

@@ -10,6 +10,10 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Dan on 16/09/2017.
@@ -52,6 +56,7 @@ public class MyApplication extends Application {
             }
         };
         MyApplication.getFirebaseAuth().addAuthStateListener(authStateListener);
+
     }
 
 

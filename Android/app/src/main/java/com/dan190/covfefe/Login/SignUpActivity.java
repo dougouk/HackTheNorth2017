@@ -31,7 +31,7 @@ import butterknife.OnClick;
 public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = SignUpActivity.class.getSimpleName();
 
-    @BindView(R.id.userId)
+    @BindView(R.id.username)
     EditText username;
 
     @BindView(R.id.password)

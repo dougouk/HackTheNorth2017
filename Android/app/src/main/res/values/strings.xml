@@ -21,4 +21,7 @@
     <string name="change_display_name">Change display name</string>
     <string name="enter_new_display_name">You must put something as your display name!! Try again</string>
     <string name="display_name_failed_to_change">Display name failed to change</string>
+    <string name="login_title">LOG IN YOUR ACCOUNT</string>
+    <string name="login_subtitle">Please enter your email address and password</string>
+    <string name="login_alternative">Or log in with</string>
 </resources>

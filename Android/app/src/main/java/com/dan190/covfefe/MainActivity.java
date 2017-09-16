@@ -1,8 +1,12 @@
 package com.dan190.covfefe;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,45 +18,78 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.dan190.covfefe.ApplicationCore.MyApplication;
+import com.dan190.covfefe.Group.GroupViewFragment;
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.Util.MainSharedPreferences;
 import com.facebook.login.LoginManager;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private TextView headerName;
     private TextView headerContactInfo;
     private User currentUser;
+    private FrameLayout container;
+    private GroupViewFragment groupViewFragment;
 
+    private RequestQueue queue;
+
+    @BindView(R.id.fab)
+    FloatingActionsMenu fab;
+
+    @BindView(R.id.content_main)
+    ConstraintLayout contentMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-/*
+        ButterKnife.bind(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace action to create a group!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-*/
+        loadSideMenu();
 
-        FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.fab);
+        setUpFAB();
+
+        // Load group view fragment into activity
+        contentMain.findViewById(R.id.container);
+        if(groupViewFragment == null){
+            groupViewFragment = new GroupViewFragment();
+        }
+        getFragmentManager().beginTransaction().replace(R.id.container, groupViewFragment).commit();
+
+        Log.d(TAG, String.format("Firebase token: %s", FirebaseInstanceId.getInstance().getToken()));
+
+        queue = Volley.newRequestQueue(MyApplication.getInstance());
+
+    }
+
+    private void setUpFAB() {
         FloatingActionButton createGroup = new FloatingActionButton(MyApplication.getInstance());
         createGroup.setIconDrawable(getDrawable(R.drawable.ic_add_circle_black_24dp));
         createGroup.setEnabled(true);
@@ -71,14 +108,45 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "Join group clicked");
             }
         });
+
+        FloatingActionButton cloudMessaging = new FloatingActionButton(MyApplication.getInstance());
+        cloudMessaging.setIconDrawable(getDrawable(R.drawable.ic_cloud_circle_black_24dp));
+        cloudMessaging.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String accountname = getAccount();
+
+                final String scope = "audience:server:client_id:" + getString(R.string.o_auth_key_dan);
+                String idToken = null;
+                try{
+                    idToken = GoogleAuthUtil.getToken(MyApplication.getInstance(), accountname, scope);
+                } catch (GoogleAuthException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                String SENDER_ID = "BLACH";
+                FirebaseMessaging fm = FirebaseMessaging.getInstance();
+                fm.send(new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
+                .setMessageId("Message id")
+                .addData("my_message", "Hello message")
+                .addData("my_action", "notification")
+                .build());
+            }
+        });
         fab.addButton(createGroup);
         fab.addButton(joinGroup);
+    }
 
-
+    private void loadSideMenu() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -89,7 +157,6 @@ public class MainActivity extends AppCompatActivity
         headerName = (TextView) headerView.findViewById(R.id.name);
         headerContactInfo = (TextView) headerView.findViewById(R.id.contactInfo);
 
-        //TODO incorrect display name and email
         switch(MainSharedPreferences.retrieveAccountType(MyApplication.getInstance())){
             case 0:
                 // No Account
@@ -113,8 +180,6 @@ public class MainActivity extends AppCompatActivity
         currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
         headerName.setText(currentUser.getDisplayName());
         headerContactInfo.setText(currentUser.getEmail());
-
-
     }
 
     @Override
@@ -166,6 +231,17 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // This snippet takes the simple approach of using the first returned Google account,
+    // but you can pick any Google account on the device.
+    public String getAccount() {
+        Account[] accounts = AccountManager.get(getApplicationContext()).
+                getAccountsByType("com.google");
+        if (accounts.length == 0) {
+            return null;
+        }
+        return accounts[0].name;
     }
 
     private void signOutAndFinish(){

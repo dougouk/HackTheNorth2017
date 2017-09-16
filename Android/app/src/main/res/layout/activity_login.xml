@@ -14,21 +14,45 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
+        <TextView
+            android:id="@+id/loginTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/loginSubtitle"
+            android:text="@string/login_title"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintHorizontal_bias="1.0"
+            style="@style/LoginTitle"
+            app:layout_constraintVertical_bias="0.23000002" />
+        <TextView
+            android:id="@+id/loginSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/loginTitle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/username"
+            android:layout_marginBottom="30dp"
+            android:text="@string/login_subtitle"
+            style="@style/LoginSubtitle"/>
         <EditText
             android:id="@+id/username"
-            android:layout_width="0dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginSubtitle"
             app:layout_constraintBottom_toTopOf="@+id/password"
             android:hint="@string/email"
             app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintHorizontal_bias="1.0" />
+            style="@style/LoginEdit"/>
 
         <EditText
             android:id="@+id/password"
-            android:layout_width="0dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -36,36 +60,48 @@
             app:layout_constraintTop_toBottomOf="@+id/username"
             app:layout_constraintBottom_toBottomOf="parent"
             android:hint="@string/password"
-            app:layout_constraintHorizontal_bias="1.0" />
+            style="@style/LoginEdit"/>
 
         <Button
             android:id="@+id/login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@+id/signup"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password"
             app:layout_constraintBottom_toTopOf="@+id/facebook_login"
             app:layout_constraintVertical_chainStyle="packed"
             android:text="@string/login"
-            android:background="@color/colorBlue"/>
+            android:background="@drawable/btn_login"
+            style="@style/LoginButton"/>
 
-        <Button
+        <TextView
             android:id="@+id/signup"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/login"
-            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login"
+            android:paddingBottom="30dp"/>
+        
+        <TextView
+            android:id="@+id/loginAlternative"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup"
             app:layout_constraintBottom_toTopOf="@+id/facebook_login"
-            android:text="@string/signup" />
-
+            android:text="@string/login_alternative"
+            android:paddingBottom="20dp"
+            style="@style/LoginTextView"/>
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/facebook_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:background="@drawable/ic_facebook"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signup"
