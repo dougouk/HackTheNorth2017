@@ -1,10 +1,10 @@
 package com.dan190.covfefe;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,18 +14,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.dan190.covfefe.ApplicationCore.MyApplication;
+import com.dan190.covfefe.Models.FacebookAccount;
+import com.dan190.covfefe.Models.User;
+import com.dan190.covfefe.Util.MainSharedPreferences;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authStateListener;
+    private TextView headerName;
+    private TextView headerContactInfo;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Replace action to create a group!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -52,21 +57,37 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        auth = MyApplication.getFirebaseAuth();
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null){
-                    // Signed out
-                    signOutAndFinish();
-                }else{
-                    // Signed in
-                    Log.i(TAG, "User signed in at MainActivity");
-                }
-            }
-        };
-        auth.addAuthStateListener(authStateListener);
+        // Set username, email and profile picture
+        View headerView = navigationView.getHeaderView(0);
+        headerName = (TextView) headerView.findViewById(R.id.name);
+        headerContactInfo = (TextView) headerView.findViewById(R.id.contactInfo);
+
+        //TODO incorrect display name and email
+        switch(MainSharedPreferences.retrieveAccountType(MyApplication.getInstance())){
+            case 0:
+                // No Account
+                break;
+            case MainSharedPreferences.EMAIL_ACCOUNT:
+                currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
+                headerName.setText(currentUser.getDisplayName());
+                headerContactInfo.setText(currentUser.getEmail());
+                break;
+            case MainSharedPreferences.FACEBOOK_ACCOUNT:
+                FacebookAccount facebookAccount = MainSharedPreferences.retrieveFacebookAccount(MyApplication.getInstance());
+                currentUser = new User(facebookAccount.getUsername(), null, null, null, facebookAccount);
+                headerName.setText(facebookAccount.getUsername());
+                headerContactInfo.setText("");
+                break;
+            default:
+                break;
+
+
+        }
+        currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
+        headerName.setText(currentUser.getDisplayName());
+        headerContactInfo.setText(currentUser.getEmail());
+
+
     }
 
     @Override
@@ -110,6 +131,9 @@ public class MainActivity extends AppCompatActivity
         if(id == R.id.nav_logout){
             // Log out
             signOutAndFinish();
+        }else if (id == R.id.nav_profile){
+            // Edit profile
+            startActivity(new Intent(MainActivity.this, EditProfileActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -118,7 +142,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void signOutAndFinish(){
-        auth.signOut();
+        MyApplication.getFirebaseAuth().signOut();
+        LoginManager.getInstance().logOut();
         finish();
     }
 }
