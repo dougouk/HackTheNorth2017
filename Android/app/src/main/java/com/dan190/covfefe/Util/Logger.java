@@ -3,7 +3,7 @@ package com.dan190.covfefe.Util;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.dan190.covfefe.MyApplication;
+import com.dan190.covfefe.ApplicationCore.MyApplication;
 
 /**
  * Created by Dan on 16/09/2017.

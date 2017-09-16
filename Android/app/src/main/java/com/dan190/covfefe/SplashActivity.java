@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Login.AllowLocationActivity;
 import com.dan190.covfefe.Login.LoginActivity;
 import com.dan190.covfefe.Util.Logger;
@@ -17,8 +18,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Created by Dan on 16/09/2017.

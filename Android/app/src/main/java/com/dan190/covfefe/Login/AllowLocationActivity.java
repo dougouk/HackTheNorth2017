@@ -1,7 +1,6 @@
 package com.dan190.covfefe.Login;
 
 import android.Manifest;
-import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -14,7 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.dan190.covfefe.MainActivity;
-import com.dan190.covfefe.MyApplication;
+import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.R;
 
 import butterknife.BindView;

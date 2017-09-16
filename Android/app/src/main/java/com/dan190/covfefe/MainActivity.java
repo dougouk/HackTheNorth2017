@@ -1,10 +1,10 @@
 package com.dan190.covfefe;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,12 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.dan190.covfefe.ApplicationCore.MyApplication;
+import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.Util.MainSharedPreferences;
+import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -63,6 +63,26 @@ public class MainActivity extends AppCompatActivity
         headerContactInfo = (TextView) headerView.findViewById(R.id.contactInfo);
 
         //TODO incorrect display name and email
+        switch(MainSharedPreferences.retrieveAccountType(MyApplication.getInstance())){
+            case 0:
+                // No Account
+                break;
+            case MainSharedPreferences.EMAIL_ACCOUNT:
+                currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
+                headerName.setText(currentUser.getDisplayName());
+                headerContactInfo.setText(currentUser.getEmail());
+                break;
+            case MainSharedPreferences.FACEBOOK_ACCOUNT:
+                FacebookAccount facebookAccount = MainSharedPreferences.retrieveFacebookAccount(MyApplication.getInstance());
+                currentUser = new User(facebookAccount.getUsername(), null, null, null, facebookAccount);
+                headerName.setText(facebookAccount.getUsername());
+                headerContactInfo.setText("");
+                break;
+            default:
+                break;
+
+
+        }
         currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
         headerName.setText(currentUser.getDisplayName());
         headerContactInfo.setText(currentUser.getEmail());
@@ -113,6 +133,7 @@ public class MainActivity extends AppCompatActivity
             signOutAndFinish();
         }else if (id == R.id.nav_profile){
             // Edit profile
+            startActivity(new Intent(MainActivity.this, EditProfileActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

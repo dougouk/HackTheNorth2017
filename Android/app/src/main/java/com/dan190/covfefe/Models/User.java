@@ -13,10 +13,10 @@ public class User {
     private String photoUrl;
     private FacebookAccount facebookAccount;
 
-    public User(String displayName, String email, String id, String photoUrl, @Nullable FacebookAccount facebookAccount) {
+    public User(String displayName, @Nullable String email, @Nullable String googleId, @Nullable String photoUrl, @Nullable FacebookAccount facebookAccount) {
         this.displayName = displayName;
         this.email = email;
-        this.id = id;
+        this.id = googleId;
         this.photoUrl = photoUrl;
         this.facebookAccount = facebookAccount;
     }
@@ -39,5 +39,9 @@ public class User {
 
     public FacebookAccount getFacebookAccount() {
         return facebookAccount;
+    }
+
+    public void setFacebookAccount(FacebookAccount facebookAccount) {
+        this.facebookAccount = facebookAccount;
     }
 }

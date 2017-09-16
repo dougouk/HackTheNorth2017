@@ -12,8 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.dan190.covfefe.Models.User;
-import com.dan190.covfefe.MyApplication;
+import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.R;
 import com.dan190.covfefe.Util.Logger;
 import com.dan190.covfefe.Util.MainSharedPreferences;
@@ -21,6 +20,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,7 +29,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseUser;
+
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -154,14 +156,27 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void handleFacebookAccessToken(AccessToken accessToken){
+    private void handleFacebookAccessToken(final AccessToken accessToken){
         AuthCredential authCredential = FacebookAuthProvider.getCredential(accessToken.getToken());
         MyApplication.getFirebaseAuth().signInWithCredential(authCredential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            proceed();
+                            GraphRequest request = GraphRequest.newMeRequest(
+                                    accessToken,
+                                    new GraphRequest.GraphJSONObjectCallback() {
+                                        @Override
+                                        public void onCompleted(JSONObject object, GraphResponse response) {
+                                            MainSharedPreferences.facebookLogin(MyApplication.getInstance(), object);
+                                            proceed();
+                                        }
+                                    }
+                            );
+                            Bundle parameters = new Bundle();
+                            parameters.putString("fields", "id,name,email");
+                            request.setParameters(parameters);
+                            request.executeAsync();
                         }else{
                             Logger.makeToast(getString(R.string.facebook_login_failed));
                             resetViews();

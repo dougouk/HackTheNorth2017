@@ -1,13 +1,13 @@
-package com.dan190.covfefe;
+package com.dan190.covfefe.ApplicationCore;
 
-import android.app.Application;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.Util.MainSharedPreferences;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -15,20 +15,17 @@ import com.google.firebase.auth.FirebaseUser;
  * Created by Dan on 16/09/2017.
  */
 
-public class MyApplication extends Application {
-    private static final String TAG = MyApplication.class.getSimpleName();
+public class BaseActivity extends AppCompatActivity {
+    private static final String TAG = BaseActivity.class.getSimpleName();
 
-    private static MyApplication instance;
-    private static FirebaseAuth auth;
-    private static FirebaseAuth.AuthStateListener authStateListener;
+    private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        instance = this;
-        auth = FirebaseAuth.getInstance();
-        FacebookSdk.sdkInitialize(this);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        auth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -46,26 +43,13 @@ public class MyApplication extends Application {
                 }else{
                     // Signed out
 
-                    signOutAndFinish();
-
                 }
             }
         };
         MyApplication.getFirebaseAuth().addAuthStateListener(authStateListener);
     }
 
-
-    public static MyApplication getInstance(){
-        return instance;
-    }
-
-    public static FirebaseAuth getFirebaseAuth(){
+    public FirebaseAuth getAuth() {
         return auth;
-    }
-
-    private void signOutAndFinish(){
-        auth.removeAuthStateListener(authStateListener);
-        auth.signOut();
-        LoginManager.getInstance().logOut();
     }
 }

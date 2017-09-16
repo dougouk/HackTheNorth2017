@@ -8,8 +8,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/loginComponents"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -58,8 +58,7 @@
             app:layout_constraintRight_toLeftOf="@+id/login"
             app:layout_constraintTop_toBottomOf="@+id/password"
             app:layout_constraintBottom_toTopOf="@+id/facebook_login"
-            android:text="@string/signup"
-            app:layout_constraintHorizontal_chainStyle="spread" />
+            android:text="@string/signup" />
 
 
         <com.facebook.login.widget.LoginButton
