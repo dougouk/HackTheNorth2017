@@ -37,6 +37,7 @@ public class SplashActivity extends AppCompatActivity {
                     // User is signed in
                     Log.d(TAG, "signed in");
                     MyApplication.setUser(user);
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 }else{
                     // User is not signed in
                     Log.d(TAG, "user not signed in");

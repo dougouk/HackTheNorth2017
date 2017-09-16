@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintVertical_chainStyle="packed"
-        android:hint="@string/username"/>
+        android:hint="@string/email"/>
 
     <EditText
         android:id="@+id/password"

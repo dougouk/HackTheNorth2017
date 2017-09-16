@@ -12,4 +12,7 @@
     <string name="login">Login</string>
     <string name="signup_failed">Sign up failed. Did you enter a valid email? Please try again</string>
     <string name="password_no_match">Password does not match</string>
+    <string name="allow">Get started</string>
+    <string name="email">Email</string>
+    <string name="login_failed">Login unsuccessful. Are you sure you have the correct password?</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.dan190.covfefe.Login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dan190.covfefe.MainActivity;
 import com.dan190.covfefe.MyApplication;
 import com.dan190.covfefe.R;
 import com.dan190.covfefe.Util.Logger;
@@ -75,6 +77,7 @@ public class SignUpActivity extends AppCompatActivity {
                         }else{
                             Log.d(TAG, "created user");
                             MyApplication.setUser(auth.getCurrentUser());
+                            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                         }
                     }
                 });
