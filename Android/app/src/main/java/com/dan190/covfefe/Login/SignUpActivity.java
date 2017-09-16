@@ -30,9 +30,6 @@ import butterknife.OnClick;
 public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = SignUpActivity.class.getSimpleName();
 
-    private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authStateListener;
-
     @BindView(R.id.username)
     EditText username;
 
@@ -51,7 +48,6 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_new_account);
         ButterKnife.bind(this);
 
-        auth = MyApplication.getFirebaseAuth();
     }
 
     @OnClick(R.id.signup)
@@ -66,7 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        auth.createUserWithEmailAndPassword(email, pass)
+        MyApplication.getFirebaseAuth().createUserWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -76,7 +72,6 @@ public class SignUpActivity extends AppCompatActivity {
                             Logger.makeToast(getString(R.string.signup_failed));
                         }else{
                             Log.d(TAG, "created user");
-                            MyApplication.setUser(auth.getCurrentUser());
                             startActivity(new Intent(SignUpActivity.this, AllowLocationActivity.class));
                         }
                     }

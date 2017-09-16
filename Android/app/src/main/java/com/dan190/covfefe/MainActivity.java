@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,9 +24,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,21 +50,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        auth = MyApplication.getFirebaseAuth();
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null){
-                    // Signed out
-                    signOutAndFinish();
-                }else{
-                    // Signed in
-                    Log.i(TAG, "User signed in at MainActivity");
-                }
-            }
-        };
-        auth.addAuthStateListener(authStateListener);
+
     }
 
     @Override
@@ -118,7 +102,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void signOutAndFinish(){
-        auth.signOut();
+        MyApplication.getFirebaseAuth().signOut();
+        LoginManager.getInstance().logOut();
         finish();
     }
 }
