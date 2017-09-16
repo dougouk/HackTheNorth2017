@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity
             groupViewFragment = new GroupViewFragment();
         }
         getFragmentManager().beginTransaction().replace(R.id.container, groupViewFragment).commit();
+        getSupportActionBar().setTitle("Groups");
 
         Log.d(TAG, String.format("Firebase token: %s", FirebaseInstanceId.getInstance().getToken()));
 

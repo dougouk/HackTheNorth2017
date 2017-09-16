@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Login.AllowLocationActivity;
 import com.dan190.covfefe.Login.LoginActivity;
+import com.dan190.covfefe.Login.SignUpActivity;
 import com.dan190.covfefe.Util.Logger;
 import com.facebook.AccessToken;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,6 +22,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Dan on 16/09/2017.
@@ -27,11 +35,20 @@ public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_TIMEOUT = 800; //ms
     private static final String TAG = SplashActivity.class.getSimpleName();
 
+    @BindView(R.id.login)
+    TextView login;
+
+    @BindView(R.id.signup)
+    TextView signup;
+
+    @BindView(R.id.bottomBar)
+    ConstraintLayout bottomBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_splash);
+        ButterKnife.bind(this);
 
         if(MyApplication.getFirebaseAuth().getCurrentUser()!=null){
             // User is signed in
@@ -43,11 +60,11 @@ public class SplashActivity extends AppCompatActivity {
 
             if(AccessToken.getCurrentAccessToken() == null){
                 Log.d(TAG, "Facebook not signed in either");
+                // make text visible
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                        finish();
+                        bottomBar.setVisibility(View.VISIBLE);
                     }
                 }, SPLASH_TIMEOUT);
             }else {
@@ -81,8 +98,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private void proceedLogOn(){
-        startActivity(new Intent(SplashActivity.this, AllowLocationActivity.class));
-        finish();
+    @OnClick(R.id.login)
+    public void proceedLogOn(){
+        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+    }
+
+    @OnClick(R.id.signup)
+    public void signUp(){
+        startActivity(new Intent(SplashActivity.this, SignUpActivity.class));
     }
 }

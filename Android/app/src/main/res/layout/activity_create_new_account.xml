@@ -43,14 +43,14 @@
 
     <Button
         android:id="@+id/signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/login_btn_width"
+        android:layout_height="@dimen/login_btn_height"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_repeat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.49"
         android:text="@string/signup"
-        android:background="@color/colorBlue"/>
+        android:background="@drawable/btn_login"/>
 
 </android.support.constraint.ConstraintLayout>

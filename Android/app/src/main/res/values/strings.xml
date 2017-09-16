@@ -24,4 +24,5 @@
     <string name="login_title">LOG IN YOUR ACCOUNT</string>
     <string name="login_subtitle">Please enter your email address and password</string>
     <string name="login_alternative">Or log in with</string>
+    <string name="splash_title">COFFEE TIME</string>
 </resources>
