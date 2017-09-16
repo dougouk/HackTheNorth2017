@@ -98,13 +98,18 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.signup)
     public void signUp(){
         startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
-        finish();
     }
 
     @OnClick(R.id.login)
     public void login(){
+        verifyForm();
         String email = username.getText().toString();
         String pass = password.getText().toString();
+
+        if (email.equals("") || pass.equals("")) {
+            Logger.makeToast(getString(R.string.fill_out_login_info));
+            return;
+        }
 
         MyApplication.getFirebaseAuth().signInWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -121,13 +126,17 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    private void verifyForm(){
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         mainLayout.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        
+
         // Pass the activity result back to the Facebook SDK
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }

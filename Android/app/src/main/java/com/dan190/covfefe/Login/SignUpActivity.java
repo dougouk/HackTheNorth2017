@@ -57,6 +57,11 @@ public class SignUpActivity extends AppCompatActivity {
         String pass = password.getText().toString();
         String passRepeat = passwordRepeat.getText().toString();
 
+        if (email.equals("") || pass.equals("") || passRepeat.equals("")) {
+            Logger.makeToast(getString(R.string.fill_out_login_info));
+            return;
+        }
+
         if(!pass.equals(passRepeat)){
             Logger.makeToast(getString(R.string.password_no_match));
             return;
