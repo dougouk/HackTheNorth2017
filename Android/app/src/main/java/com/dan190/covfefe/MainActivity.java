@@ -1,27 +1,27 @@
 package com.dan190.covfefe;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.SharedPreferencesCompat;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.Util.MainSharedPreferences;
-import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,12 +32,14 @@ public class MainActivity extends AppCompatActivity
     private TextView headerContactInfo;
     private User currentUser;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+/*
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +49,30 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+*/
+
+        FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.fab);
+        FloatingActionButton createGroup = new FloatingActionButton(MyApplication.getInstance());
+        createGroup.setImageBitmap(BitmapFactory.decodeResource(MyApplication.getInstance().getResources(), R.drawable.ic_add_circle_black_24dp));
+        createGroup.setEnabled(true);
+        createGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Create group clicked");
+            }
+        });
+
+        FloatingActionButton joinGroup = new FloatingActionButton(MyApplication.getInstance());
+        joinGroup.setImageBitmap(BitmapFactory.decodeResource(MyApplication.getInstance().getResources(), R.drawable.ic_exit_to_app_black_24dp));
+        joinGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Join group clicked");
+            }
+        });
+        fab.addButton(createGroup);
+        fab.addButton(joinGroup);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
