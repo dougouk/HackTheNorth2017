@@ -2,11 +2,9 @@ package com.dan190.covfefe.Util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.content.ContextCompat;
 
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
-import com.facebook.AccessToken;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,6 +23,7 @@ public class MainSharedPreferences {
     private static final String DISPLAY_NAME = "display_name";
     private static final String PHOTO_URL = "photo_url";
     private static final String GOOGLE_ID = "google_id";
+    private static final String FIREBASE_ID = "firebase_id";
 
     // 1 = email
     // 2 = facebook
@@ -67,12 +66,9 @@ public class MainSharedPreferences {
         try{
             editor.putString(DISPLAY_NAME, user.getDisplayName());
             editor.putString(PHOTO_URL, user.getPhotoUrl());
-            editor.putString(GOOGLE_ID, user.getId());
+            editor.putString(GOOGLE_ID, user.getSignOnId());
             editor.putInt(ACCOUNT_TYPE, EMAIL_ACCOUNT);
-
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("users");
-            myRef.setValue(user);
+            editor.putString(FIREBASE_ID, GroupUtils.init_user(user));
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -93,7 +89,7 @@ public class MainSharedPreferences {
         String email = sharedPreferences.getString(EMAIL, "");
         String id = sharedPreferences.getString(GOOGLE_ID, "");
         String photoUrl= sharedPreferences.getString(PHOTO_URL, "");
-        return new User(displayName, email, id, photoUrl, null);
+        return new User(displayName, id, photoUrl, null);
     }
 
     public static FacebookAccount retrieveFacebookAccount(final Context context){

@@ -92,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity {
                             String email = user.getEmail();
                             String id = user.getUid();
                             String photoUrl = user.getPhotoUrl().toString();
-                            User newUser = new User(name, email, id, photoUrl, null);
+                            User newUser = new User(name, id, photoUrl, null);
                             MainSharedPreferences.emailLogin(MyApplication.getInstance(), newUser);
 
                             startActivity(new Intent(SignUpActivity.this, AllowLocationActivity.class));

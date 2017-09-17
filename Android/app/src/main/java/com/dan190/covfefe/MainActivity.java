@@ -58,9 +58,6 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.content_main)
     ConstraintLayout contentMain;
-    // Write a message to the database
-    FirebaseDatabase database;
-    DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +66,6 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // Write a message to the database
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("message");
-
 
         loadSideMenu();
 
@@ -177,7 +169,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case MainSharedPreferences.FACEBOOK_ACCOUNT:
                 FacebookAccount facebookAccount = MainSharedPreferences.retrieveFacebookAccount(MyApplication.getInstance());
-                currentUser = new User(facebookAccount.getUsername(), null, null, null, facebookAccount);
+                currentUser = new User(facebookAccount.getUsername(), MyApplication.getFirebaseAuth().getCurrentUser().getUid(), null, facebookAccount);
                 headerName.setText(facebookAccount.getUsername());
                 headerContactInfo.setText("");
                 break;

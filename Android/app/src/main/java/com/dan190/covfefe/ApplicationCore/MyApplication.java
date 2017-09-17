@@ -49,10 +49,9 @@ public class MyApplication extends Application {
                     // Signed in
                     Log.i(TAG, "User signed in");
                     String name = user.getDisplayName();
-                    String email = user.getEmail();
                     String id = user.getUid();
                     String photoUrl = "";
-                    User newUser = new User(name, email, id, photoUrl, null);
+                    User newUser = new User(name, id, photoUrl, null);
                     MainSharedPreferences.emailLogin(MyApplication.getInstance(), newUser);
 
                 }else{
@@ -65,6 +64,7 @@ public class MyApplication extends Application {
         };
         MyApplication.getFirebaseAuth().addAuthStateListener(authStateListener);
 
+        mGlobalDB = FirebaseDatabase.getInstance();
     }
 
 

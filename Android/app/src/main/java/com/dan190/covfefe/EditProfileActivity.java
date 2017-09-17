@@ -55,7 +55,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String userIdString = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getId();
+        String userIdString = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getSignOnId();
         String username = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getDisplayName();
         userId.setText(userIdString);
         newNameEditText.setHint(username);
