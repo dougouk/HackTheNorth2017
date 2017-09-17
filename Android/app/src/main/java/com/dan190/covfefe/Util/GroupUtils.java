@@ -11,11 +11,11 @@ import com.google.firebase.database.FirebaseDatabase;
  * Created by david on 2017-09-16.
  */
 
-public class GroupUtils extends Activity {
+public final class GroupUtils extends Activity {
 
-    FirebaseDatabase database = MyApplication.getInstance().getGlobalDB();
+    static FirebaseDatabase database = MyApplication.getInstance().getGlobalDB();
 
-    public String init_user(User new_user){
+    public static String init_user(User new_user){
 
         DatabaseReference usersRef = database.getReference("users");
 
@@ -23,6 +23,8 @@ public class GroupUtils extends Activity {
         newUserRef.setValue(new_user);
 
         String user_id = newUserRef.getKey();
+
+        new_user.setFirebaseDbId(user_id);
 
         return user_id;
     }
