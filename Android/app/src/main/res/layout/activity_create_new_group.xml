@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/createGroupTitle"
+        android:text="@string/create_new_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/createGroupSubtitle"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:paddingBottom="15dp"
+        style="@style/LoginTitle"/>
+    <TextView
+        android:id="@+id/createGroupSubtitle"
+        android:text="@string/create_new_group_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createGroupTitle"
+        app:layout_constraintBottom_toTopOf="@+id/createGroupName"
+        android:paddingBottom="30dp"
+        style="@style/LoginSubtitle"/>
+    <EditText
+        android:id="@+id/createGroupName"
+        style="@style/LoginEdit"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createGroupSubtitle"
+        app:layout_constraintBottom_toTopOf="@+id/createGroupButton"/>
+    <Button
+        android:id="@+id/createGroupButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createGroupName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="30dp"
+        android:text="@string/create"
+        android:enabled="false"
+        style="@style/LoginButton"/>
+
+</android.support.constraint.ConstraintLayout>

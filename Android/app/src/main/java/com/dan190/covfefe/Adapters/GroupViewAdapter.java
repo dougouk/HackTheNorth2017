@@ -1,6 +1,7 @@
 package com.dan190.covfefe.Adapters;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Group.GroupViewFragment;
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.R;
@@ -28,6 +30,7 @@ public class GroupViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private String groupName;
     private long lastOrder;
     private List<User> members;
+    private boolean favorited;
 
     public GroupViewAdapter(Context context, String groupName, long lastOrder, List<User> members){
         this.context = context;
@@ -66,15 +69,30 @@ public class GroupViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder");
+
+        GroupViewHolder viewHolder = (GroupViewHolder) holder;
+        viewHolder.groupName.setText(members.get(position).getDisplayName());
+        viewHolder.groupLastOrder.setText(Long.toString(lastOrder));
+        viewHolder.groupPopulation.setText(Integer.toString(members.size()));
+
+        GroupInnerViewAdapter adapter = new GroupInnerViewAdapter(context, members);
+        viewHolder.groupMemberList.setAdapter(adapter);
+        viewHolder.groupMemberList.setHasFixedSize(true);
+        LinearLayoutManager manager = new LinearLayoutManager(MyApplication.getInstance(), LinearLayoutManager.HORIZONTAL, false);
+        viewHolder.groupMemberList.setLayoutManager(manager);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return members.size();
     }
 
     @Override
     public int getItemViewType(int position) {
         return GROUP_VIEW_TYPE;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
     }
 }

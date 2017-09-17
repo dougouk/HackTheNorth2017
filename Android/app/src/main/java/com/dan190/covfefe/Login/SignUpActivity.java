@@ -13,6 +13,7 @@ import android.widget.EditText;
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.R;
+import com.dan190.covfefe.Util.GroupUtils;
 import com.dan190.covfefe.Util.Logger;
 import com.dan190.covfefe.Util.MainSharedPreferences;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -89,12 +90,12 @@ public class SignUpActivity extends AppCompatActivity {
                             // Save user
                             FirebaseUser user = MyApplication.getFirebaseAuth().getCurrentUser();
                             String name = user.getDisplayName();
-                            String email = user.getEmail();
                             String id = user.getUid();
                             String photoUrl = user.getPhotoUrl().toString();
                             User newUser = new User(name, id, photoUrl, null);
                             MainSharedPreferences.emailLogin(MyApplication.getInstance(), newUser);
-
+                            MainSharedPreferences.storeFirebasedId(MyApplication.getInstance(),
+                                    GroupUtils.init_user(newUser));
                             startActivity(new Intent(SignUpActivity.this, AllowLocationActivity.class));
 
                         }else{

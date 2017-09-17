@@ -58,7 +58,7 @@ public class EditProfileActivity extends AppCompatActivity {
         String userIdString = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getSignOnId();
         String username = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getDisplayName();
         userId.setText(userIdString);
-        newNameEditText.setHint(username);
+        newNameEditText.setText(username);
 
         newNameEditText.addTextChangedListener(textCounter);
         changeNameButton.setEnabled(false);

@@ -20,9 +20,12 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.dan190.covfefe.ApplicationCore.MyApplication;
+import com.dan190.covfefe.Group.CreateGroupActivity;
 import com.dan190.covfefe.Group.GroupViewFragment;
 import com.dan190.covfefe.Models.FacebookAccount;
+import com.dan190.covfefe.Models.Group;
 import com.dan190.covfefe.Models.User;
+import com.dan190.covfefe.Util.GroupUtils;
 import com.dan190.covfefe.Util.MainSharedPreferences;
 import com.facebook.login.LoginManager;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -66,9 +69,10 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Groups");
 
+        // Initialization stuff
         loadSideMenu();
-
         setUpFAB();
 
         // Load group view fragment into activity
@@ -77,10 +81,8 @@ public class MainActivity extends AppCompatActivity
             groupViewFragment = new GroupViewFragment();
         }
         getFragmentManager().beginTransaction().replace(R.id.container, groupViewFragment).commit();
-        getSupportActionBar().setTitle("Groups");
 
-        Log.d(TAG, String.format("Firebase token: %s", FirebaseInstanceId.getInstance().getToken()));
-
+        // Initialize Http Volley
         queue = Volley.newRequestQueue(MyApplication.getInstance());
 
     }
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Create group clicked");
+                startActivity(new Intent(MainActivity.this, CreateGroupActivity.class));
             }
         });
 

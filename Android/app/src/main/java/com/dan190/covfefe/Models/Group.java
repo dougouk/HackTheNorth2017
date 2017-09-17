@@ -18,7 +18,11 @@ public class Group {
         return groupName;
     }
 
-    public String setGroupCode(String group_code){
+    public void setGroupCode(String group_code){
         this.groupCode = group_code;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
     }
 }

@@ -2,6 +2,8 @@ package com.dan190.covfefe.Util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
@@ -16,6 +18,8 @@ import org.json.JSONObject;
  */
 
 public class MainSharedPreferences {
+    private static final String TAG = MainSharedPreferences.class.getSimpleName();
+
     private static final String COVFEFE_USER = "covfefe_user";
     private static final String FB_ID = "facebook_id";
     private static final String FB_NAME = "facebook_name";
@@ -68,11 +72,31 @@ public class MainSharedPreferences {
             editor.putString(PHOTO_URL, user.getPhotoUrl());
             editor.putString(GOOGLE_ID, user.getSignOnId());
             editor.putInt(ACCOUNT_TYPE, EMAIL_ACCOUNT);
-            editor.putString(FIREBASE_ID, GroupUtils.init_user(user));
         }catch(Exception e){
             e.printStackTrace();
         }
         return editor.commit();
+    }
+
+    public static boolean storeFirebasedId(final Context context, String fbId){
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(COVFEFE_USER, Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        try{
+            editor.putString(FIREBASE_ID, fbId);
+
+        }catch (Exception e){
+            Log.e(TAG, e.toString());
+        }
+        return editor.commit();
+    }
+
+    public static String retrieveFirebaseId(final Context context){
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(COVFEFE_USER, Context.MODE_PRIVATE);
+
+        String id = sharedPreferences.getString(FIREBASE_ID, "");
+
+        return id;
     }
 
     public static int retrieveAccountType(final Context context){

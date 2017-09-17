@@ -27,11 +27,8 @@ public class MyApplication extends Application {
     private static FirebaseAuth auth;
     private static FirebaseAuth.AuthStateListener authStateListener;
 
-    private FirebaseDatabase mGlobalDB;
+    private static FirebaseDatabase mGlobalDB;
 
-    public FirebaseDatabase getGlobalDB() {
-        return mGlobalDB;
-    }
 
 
     @Override
@@ -76,14 +73,18 @@ public class MyApplication extends Application {
         return auth;
     }
 
+    public static void setGlobalDB(FirebaseDatabase database) {
+        mGlobalDB = database;
+    }
+
+    public static FirebaseDatabase getGlobalDB() {
+        return mGlobalDB;
+    }
+
+
     private void signOutAndFinish(){
         auth.removeAuthStateListener(authStateListener);
         auth.signOut();
         LoginManager.getInstance().logOut();
-    }
-
-
-    public void setGlobalDB(FirebaseDatabase database) {
-        mGlobalDB = database;
     }
 }
