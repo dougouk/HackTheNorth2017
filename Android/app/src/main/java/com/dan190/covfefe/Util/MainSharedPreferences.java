@@ -7,6 +7,8 @@ import android.support.v4.content.ContextCompat;
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
 import com.facebook.AccessToken;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,10 +66,13 @@ public class MainSharedPreferences {
 
         try{
             editor.putString(DISPLAY_NAME, user.getDisplayName());
-            editor.putString(EMAIL, user.getEmail());
             editor.putString(PHOTO_URL, user.getPhotoUrl());
             editor.putString(GOOGLE_ID, user.getId());
             editor.putInt(ACCOUNT_TYPE, EMAIL_ACCOUNT);
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("users");
+            myRef.setValue(user);
         }catch(Exception e){
             e.printStackTrace();
         }

@@ -20,8 +20,9 @@
 
     <style name="LoginTextView">
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/colorTextColor</item>
+        <item name="android:fontFamily">avenir</item>
     </style>
 
     <style name="LoginTitle" parent="LoginTextView">
@@ -58,7 +59,7 @@
 
     <style name="SplashTitle" parent="SplashTextView">
         <item name="android:textSize">28dp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorTextColor</item>
         <item name="android:textStyle">bold</item>
     </style>
 

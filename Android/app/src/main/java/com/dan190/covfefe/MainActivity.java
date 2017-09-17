@@ -4,9 +4,7 @@ import android.accounts.AccountManager;
 import android.app.FragmentManager;
 import android.app.Application;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,9 +19,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Group.GroupViewFragment;
@@ -37,12 +32,9 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -108,7 +100,10 @@ public class MainActivity extends AppCompatActivity
 
     private void setUpFAB() {
         FloatingActionButton createGroup = new FloatingActionButton(MyApplication.getInstance());
-        createGroup.setIconDrawable(getDrawable(R.drawable.ic_add_circle_black_24dp));
+        createGroup.setIconDrawable(getDrawable(R.drawable.ic_shape));
+        createGroup.setColorNormal(R.color.colorTextColor);
+        createGroup.setColorPressed(R.color.colorPrimaryDark);
+
         createGroup.setEnabled(true);
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +113,9 @@ public class MainActivity extends AppCompatActivity
         });
 
         FloatingActionButton joinGroup = new FloatingActionButton(MyApplication.getInstance());
-        joinGroup.setIconDrawable(getDrawable(R.drawable.ic_exit_to_app_black_24dp));
+        joinGroup.setIconDrawable(getDrawable(R.drawable.ic_group));
+        joinGroup.setColorNormal(R.color.colorTextColor);
+        joinGroup.setColorPressed(R.color.colorPrimaryDark);
         joinGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,6 +152,7 @@ public class MainActivity extends AppCompatActivity
         });
         fab.addButton(createGroup);
         fab.addButton(joinGroup);
+        fab.addButton(cloudMessaging);
     }
 
     private void loadSideMenu() {
@@ -181,7 +179,6 @@ public class MainActivity extends AppCompatActivity
             case MainSharedPreferences.EMAIL_ACCOUNT:
                 currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
                 headerName.setText(currentUser.getDisplayName());
-                headerContactInfo.setText(currentUser.getEmail());
                 break;
             case MainSharedPreferences.FACEBOOK_ACCOUNT:
                 FacebookAccount facebookAccount = MainSharedPreferences.retrieveFacebookAccount(MyApplication.getInstance());
@@ -196,7 +193,6 @@ public class MainActivity extends AppCompatActivity
         }
         currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
         headerName.setText(currentUser.getDisplayName());
-        headerContactInfo.setText(currentUser.getEmail());
     }
 
     @Override

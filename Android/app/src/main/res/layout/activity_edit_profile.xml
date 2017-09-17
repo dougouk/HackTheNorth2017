@@ -7,20 +7,21 @@
     android:layout_height="match_parent">
     <android.support.constraint.ConstraintLayout
         android:id="@+id/mainLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="495dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
         <TextView
             android:id="@+id/displayNameTitle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/currentDisplayName"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:text="@string/display_name"
             style="@style/LoginTextView"/>
         <TextView
             android:id="@+id/currentDisplayName"
@@ -30,13 +31,10 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/displayNameTitle"
             app:layout_constraintBottom_toTopOf="@+id/newDisplayName"
-            app:layout_constraintVertical_chainStyle="packed"
             style="@style/LoginTextView"/>
 
         <EditText
             android:id="@+id/newDisplayName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/currentDisplayName"
@@ -51,7 +49,7 @@
             app:layout_constraintTop_toBottomOf="@+id/newDisplayName"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="@string/change_display_name"
-            style="@style/LoginButton"/>
+            style="@style/LoginButton" />
     </android.support.constraint.ConstraintLayout>
 
     <ProgressBar

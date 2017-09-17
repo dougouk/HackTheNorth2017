@@ -52,8 +52,8 @@ public class SplashActivity extends AppCompatActivity {
 
         if(MyApplication.getFirebaseAuth().getCurrentUser()!=null){
             // User is signed in
-            Log.d(TAG, "signed in");
-            proceedLogOn();
+            Log.d(TAG, "user is signed in");
+            proceedAllowLocationActivity();
         }else{
             // User is not signed in
             Log.d(TAG, "user not signed in");
@@ -77,7 +77,7 @@ public class SplashActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    proceedLogOn();
+                                    proceedAllowLocationActivity();
                                 }else{
                                     Logger.makeToast(getString(R.string.facebook_login_failed));
                                 }
@@ -106,5 +106,9 @@ public class SplashActivity extends AppCompatActivity {
     @OnClick(R.id.signup)
     public void signUp(){
         startActivity(new Intent(SplashActivity.this, SignUpActivity.class));
+    }
+
+    private void proceedAllowLocationActivity(){
+        startActivity(new Intent(SplashActivity.this, AllowLocationActivity.class));
     }
 }

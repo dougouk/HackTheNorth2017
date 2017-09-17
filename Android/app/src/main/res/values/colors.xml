@@ -8,4 +8,5 @@
     <color name="colorBlack">#000000</color>
     <color name="colorLightGrey">#F5F5F5</color>
     <color name="colorSplashBottomBar">#FFB400</color>
+    <color name="colorTextColor">#FFB300</color>
 </resources>
