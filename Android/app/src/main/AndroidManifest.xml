@@ -46,6 +46,8 @@
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".Group.CreateGroupActivity"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".Group.JoinGroupActivity"
+            android:parentActivityName=".MainActivity"/>
 
         <!--Firebase Cloud Msg-->
         <service android:name=".Services.MyFirebaseInstanceIdService">

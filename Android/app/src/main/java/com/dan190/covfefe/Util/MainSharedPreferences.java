@@ -2,13 +2,10 @@ package com.dan190.covfefe.Util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +23,7 @@ public class MainSharedPreferences {
     private static final String EMAIL = "email";
     private static final String DISPLAY_NAME = "display_name";
     private static final String PHOTO_URL = "photo_url";
-    private static final String GOOGLE_ID = "google_id";
+    private static final String EMAIL_AUTH_ID = "email_auth_id";
     private static final String FIREBASE_ID = "firebase_id";
 
     // 1 = email
@@ -70,7 +67,7 @@ public class MainSharedPreferences {
         try{
             editor.putString(DISPLAY_NAME, user.getDisplayName());
             editor.putString(PHOTO_URL, user.getPhotoUrl());
-            editor.putString(GOOGLE_ID, user.getSignOnId());
+            editor.putString(EMAIL_AUTH_ID, user.getSignOnId());
             editor.putInt(ACCOUNT_TYPE, EMAIL_ACCOUNT);
         }catch(Exception e){
             e.printStackTrace();
@@ -99,6 +96,14 @@ public class MainSharedPreferences {
         return id;
     }
 
+    public static String retrieveEmailAuth(final Context context){
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(COVFEFE_USER, Context.MODE_PRIVATE);
+
+        String id = sharedPreferences.getString(EMAIL_AUTH_ID, "");
+
+        return id;
+    }
+
     public static int retrieveAccountType(final Context context){
         final SharedPreferences sharedPreferences = context.getSharedPreferences(COVFEFE_USER, Context.MODE_PRIVATE);
 
@@ -111,9 +116,9 @@ public class MainSharedPreferences {
 
         String displayName = sharedPreferences.getString(DISPLAY_NAME, "");
         String email = sharedPreferences.getString(EMAIL, "");
-        String id = sharedPreferences.getString(GOOGLE_ID, "");
+        String id = sharedPreferences.getString(EMAIL_AUTH_ID, "");
         String photoUrl= sharedPreferences.getString(PHOTO_URL, "");
-        return new User(displayName, id, photoUrl, null);
+        return new User(displayName, id, null);
     }
 
     public static FacebookAccount retrieveFacebookAccount(final Context context){

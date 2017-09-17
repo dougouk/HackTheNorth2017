@@ -129,8 +129,8 @@ public final class GroupUtils extends Activity {
                     String displayName = (String) map.get(USER_DISPLAY_NAME);
                     String photoUrl = (String) map.get(USER_PHOTO_URL);
                     String signOnId = (String) map.get(USER_SIGN_ON_ID);
-                    User user = new User(displayName, signOnId, photoUrl, null);
-                    users.add(user);
+//                    User user = new User(displayName, signOnId, photoUrl, null);
+//                    users.add(user);
                 }
             }
 

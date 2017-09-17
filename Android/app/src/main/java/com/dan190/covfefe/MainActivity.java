@@ -22,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Group.CreateGroupActivity;
 import com.dan190.covfefe.Group.GroupViewFragment;
+import com.dan190.covfefe.Group.JoinGroupActivity;
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.Group;
 import com.dan190.covfefe.Models.User;
@@ -110,39 +111,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Join group clicked");
+                startActivity(new Intent(MainActivity.this, JoinGroupActivity.class));
             }
         });
 
-        FloatingActionButton cloudMessaging = new FloatingActionButton(MyApplication.getInstance());
-        cloudMessaging.setIconDrawable(getDrawable(R.drawable.ic_cloud_circle_black_24dp));
-        cloudMessaging.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String accountname = getAccount();
-
-                final String scope = "audience:server:client_id:" + getString(R.string.o_auth_key_dan);
-                String idToken = null;
-                try{
-                    idToken = GoogleAuthUtil.getToken(MyApplication.getInstance(), accountname, scope);
-                } catch (GoogleAuthException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                String SENDER_ID = "BLACH";
-                FirebaseMessaging fm = FirebaseMessaging.getInstance();
-                fm.send(new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
-                .setMessageId("Message id")
-                .addData("my_message", "Hello message")
-                .addData("my_action", "notification")
-                .build());
-            }
-        });
         fab.addButton(createGroup);
         fab.addButton(joinGroup);
-        fab.addButton(cloudMessaging);
     }
 
     private void loadSideMenu() {
@@ -169,10 +143,11 @@ public class MainActivity extends AppCompatActivity
             case MainSharedPreferences.EMAIL_ACCOUNT:
                 currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
                 headerName.setText(currentUser.getDisplayName());
+                headerContactInfo.setText("");
                 break;
             case MainSharedPreferences.FACEBOOK_ACCOUNT:
                 FacebookAccount facebookAccount = MainSharedPreferences.retrieveFacebookAccount(MyApplication.getInstance());
-                currentUser = new User(facebookAccount.getUsername(), MyApplication.getFirebaseAuth().getCurrentUser().getUid(), null, facebookAccount);
+                currentUser = new User(facebookAccount.getUsername(), MyApplication.getFirebaseAuth().getCurrentUser().getUid(), facebookAccount);
                 headerName.setText(facebookAccount.getUsername());
                 headerContactInfo.setText("");
                 break;
