@@ -27,11 +27,8 @@ public class MyApplication extends Application {
     private static FirebaseAuth auth;
     private static FirebaseAuth.AuthStateListener authStateListener;
 
-    private FirebaseDatabase mGlobalDB;
+    private static FirebaseDatabase mGlobalDB;
 
-    public FirebaseDatabase getGlobalDB() {
-        return mGlobalDB;
-    }
 
 
     @Override
@@ -49,10 +46,9 @@ public class MyApplication extends Application {
                     // Signed in
                     Log.i(TAG, "User signed in");
                     String name = user.getDisplayName();
-                    String email = user.getEmail();
                     String id = user.getUid();
                     String photoUrl = "";
-                    User newUser = new User(name, email, id, photoUrl, null);
+                    User newUser = new User(name, id, photoUrl, null);
                     MainSharedPreferences.emailLogin(MyApplication.getInstance(), newUser);
 
                 }else{
@@ -65,6 +61,7 @@ public class MyApplication extends Application {
         };
         MyApplication.getFirebaseAuth().addAuthStateListener(authStateListener);
 
+        mGlobalDB = FirebaseDatabase.getInstance();
     }
 
 
@@ -76,14 +73,18 @@ public class MyApplication extends Application {
         return auth;
     }
 
+    public static void setGlobalDB(FirebaseDatabase database) {
+        mGlobalDB = database;
+    }
+
+    public static FirebaseDatabase getGlobalDB() {
+        return mGlobalDB;
+    }
+
+
     private void signOutAndFinish(){
         auth.removeAuthStateListener(authStateListener);
         auth.signOut();
         LoginManager.getInstance().logOut();
-    }
-
-
-    public void setGlobalDB(FirebaseDatabase database) {
-        mGlobalDB = database;
     }
 }

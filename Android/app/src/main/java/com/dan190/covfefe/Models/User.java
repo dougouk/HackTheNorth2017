@@ -8,13 +8,14 @@ import android.support.annotation.Nullable;
 
 public class User {
     private String displayName;
-    private String id;
+    private String signOnId;
     private String photoUrl;
+    private String firebaseDbId;
     private FacebookAccount facebookAccount;
 
-    public User(String displayName, @Nullable String email, @Nullable String googleId, @Nullable String photoUrl, @Nullable FacebookAccount facebookAccount) {
+    public User(String displayName, String signOnId, @Nullable String photoUrl, FacebookAccount facebookAccount) {
         this.displayName = displayName;
-        this.id = googleId;
+        this.signOnId = signOnId;
         this.photoUrl = photoUrl;
         this.facebookAccount = facebookAccount;
     }
@@ -23,12 +24,16 @@ public class User {
         return displayName;
     }
 
-    public String getId() {
-        return id;
+    public String getSignOnId() {
+        return signOnId;
     }
 
     public String getPhotoUrl() {
         return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public FacebookAccount getFacebookAccount() {
@@ -37,5 +42,13 @@ public class User {
 
     public void setFacebookAccount(FacebookAccount facebookAccount) {
         this.facebookAccount = facebookAccount;
+    }
+
+    public void setFirebaseDbId(String firebaseDbId) {
+        this.firebaseDbId = firebaseDbId;
+    }
+
+    public String getFirebaseDbId() {
+        return firebaseDbId;
     }
 }

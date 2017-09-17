@@ -21,4 +21,8 @@ public class Group {
     public void setGroupCode(String group_code){
         this.groupCode = group_code;
     }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
 }

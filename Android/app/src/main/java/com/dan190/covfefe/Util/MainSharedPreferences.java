@@ -3,10 +3,10 @@ package com.dan190.covfefe.Util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
-import com.facebook.AccessToken;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -18,6 +18,8 @@ import org.json.JSONObject;
  */
 
 public class MainSharedPreferences {
+    private static final String TAG = MainSharedPreferences.class.getSimpleName();
+
     private static final String COVFEFE_USER = "covfefe_user";
     private static final String FB_ID = "facebook_id";
     private static final String FB_NAME = "facebook_name";
@@ -25,6 +27,7 @@ public class MainSharedPreferences {
     private static final String DISPLAY_NAME = "display_name";
     private static final String PHOTO_URL = "photo_url";
     private static final String GOOGLE_ID = "google_id";
+    private static final String FIREBASE_ID = "firebase_id";
 
     // 1 = email
     // 2 = facebook
@@ -67,16 +70,33 @@ public class MainSharedPreferences {
         try{
             editor.putString(DISPLAY_NAME, user.getDisplayName());
             editor.putString(PHOTO_URL, user.getPhotoUrl());
-            editor.putString(GOOGLE_ID, user.getId());
+            editor.putString(GOOGLE_ID, user.getSignOnId());
             editor.putInt(ACCOUNT_TYPE, EMAIL_ACCOUNT);
-
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("users");
-            myRef.setValue(user);
         }catch(Exception e){
             e.printStackTrace();
         }
         return editor.commit();
+    }
+
+    public static boolean storeFirebasedId(final Context context, String fbId){
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(COVFEFE_USER, Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        try{
+            editor.putString(FIREBASE_ID, fbId);
+
+        }catch (Exception e){
+            Log.e(TAG, e.toString());
+        }
+        return editor.commit();
+    }
+
+    public static String retrieveFirebaseId(final Context context){
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(COVFEFE_USER, Context.MODE_PRIVATE);
+
+        String id = sharedPreferences.getString(FIREBASE_ID, "");
+
+        return id;
     }
 
     public static int retrieveAccountType(final Context context){
@@ -93,7 +113,7 @@ public class MainSharedPreferences {
         String email = sharedPreferences.getString(EMAIL, "");
         String id = sharedPreferences.getString(GOOGLE_ID, "");
         String photoUrl= sharedPreferences.getString(PHOTO_URL, "");
-        return new User(displayName, email, id, photoUrl, null);
+        return new User(displayName, id, photoUrl, null);
     }
 
     public static FacebookAccount retrieveFacebookAccount(final Context context){

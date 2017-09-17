@@ -25,4 +25,9 @@
     <string name="login_subtitle">Please enter your email address and password</string>
     <string name="login_alternative">Or log in with</string>
     <string name="splash_title">COFFEE TIME</string>
+    <string name="create_new_group">CREATE A GROUP</string>
+    <string name="create_new_group_subtitle">Type group name in lower case</string>
+    <string name="create">CREATE</string>
+    <string name="group_name">Group name</string>
+    <string name="fill_out_group_name">Group name cannot be empty! Give it a name</string>
 </resources>
