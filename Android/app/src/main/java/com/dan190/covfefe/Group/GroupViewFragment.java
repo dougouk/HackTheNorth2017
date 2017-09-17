@@ -93,7 +93,7 @@ public class GroupViewFragment extends Fragment {
 
     private void getMembers(String groupKey){
         DatabaseReference ref = MyApplication.getGlobalDB().getReference("user");
-        String groupKey = (String) ref.child(MainSharedPreferences.retrieveFirebaseId(MyApplication.getInstance())).child("group").getKey();
+//        String groupKey = (String) ref.child(MainSharedPreferences.retrieveFirebaseId(MyApplication.getInstance())).child("group").getKey();
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override

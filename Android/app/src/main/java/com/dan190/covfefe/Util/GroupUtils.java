@@ -83,18 +83,17 @@ public final class GroupUtils extends Activity {
         DatabaseReference userRef = MyApplication.getGlobalDB().getReference("users").child(user_id);
 
         // add to group table
-        DatabaseReference newGroupUser = groupRef.push();
+        DatabaseReference newGroupUser = groupRef.child("users").push();
         newGroupUser.setValue(true);
 
         // add to user table
-        DatabaseReference newUserGroup = userRef.push();
-        newUserGroup.setValue(true);
+        DatabaseReference newUserGroup = userRef.child("groups").push();
+        newUserGroup.setValue(userRef);
     }
 
     //query group_id from group_code
     // Given the group code, looks it up and returns a reference to the group
     public static DatabaseReference get_group_using(String group_code){
-
 
         DatabaseReference groupRef = MyApplication.getGlobalDB().getReference("groups");
 

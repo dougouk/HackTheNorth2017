@@ -2,6 +2,7 @@ package com.dan190.covfefe.Util;
 
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Models.Order;
+import com.dan190.covfefe.Models.OrderItem;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -30,11 +31,16 @@ public class OrderUtils {
     }
 
     // called when others join order
-    public String join_order(String user_id, String order_id, String item_name){
-//        DatabaseReference orderItemsReference = database.getReference("order_items");
-//
-//        DatabaseReference newOrderItemRef = orderItemsReference.push();
-//        newOrderItemRef.setValue()
-        return "";
+    public String join_order(String offerer_id, String receiver_id, String order_id, String item_name){
+        DatabaseReference orderItemsReference = database.getReference("order_items");
+
+        DatabaseReference newOrderItemRef = orderItemsReference.push();
+
+        OrderItem order_item = new OrderItem(item_name, order_id, receiver_id, offerer_id);
+        newOrderItemRef.setValue(order_item);
+        String order_item_id = newOrderItemRef.getKey();
+
+        return order_item_id;
     }
+
 }
