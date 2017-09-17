@@ -14,10 +14,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Group.CreateGroupActivity;
@@ -43,6 +48,8 @@ import butterknife.ButterKnife;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -53,6 +60,7 @@ public class MainActivity extends AppCompatActivity
     private User currentUser;
     private FrameLayout container;
     private GroupViewFragment groupViewFragment;
+    private EditText balance;
 
     private RequestQueue queue;
 
@@ -68,6 +76,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        balance=(EditText) findViewById(R.id.BalanceAmountTxt);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Groups");
 
@@ -85,6 +94,24 @@ public class MainActivity extends AppCompatActivity
         // Initialize Http Volley
         queue = Volley.newRequestQueue(MyApplication.getInstance());
 
+
+        RequestQueue getQ = Volley.newRequestQueue(this);
+        String url ="https://us-central1-hackthenorth2017-630f0.cloudfunctions.net/CheckforAccountBalance";
+        // text named balance that needs to be changed
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        balance.setText(response.substring(1,5));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                balance.setText("That didn't work!");
+            }
+        });
+        queue.add(stringRequest);
     }
 
     private void setUpFAB() {
