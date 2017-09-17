@@ -29,10 +29,10 @@ public class GroupViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context context;
     private String groupName;
     private long lastOrder;
-    private List<User> members;
+    private List<List<User>> members;
     private boolean favorited;
 
-    public GroupViewAdapter(Context context, String groupName, long lastOrder, List<User> members){
+    public GroupViewAdapter(Context context, String groupName, long lastOrder, List<List<User>> members){
         this.context = context;
         this.groupName = groupName;
         this.lastOrder = lastOrder;
@@ -69,13 +69,21 @@ public class GroupViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder");
-
+        Log.d(TAG, String.format("name %s", members.get(position).get(position).getDisplayName()));
         GroupViewHolder viewHolder = (GroupViewHolder) holder;
-        viewHolder.groupName.setText(members.get(position).getDisplayName());
-        viewHolder.groupLastOrder.setText(Long.toString(lastOrder));
-        viewHolder.groupPopulation.setText(Integer.toString(members.size()));
+        viewHolder.groupName.setText("Group 1");
+        String lastOrderString = null;
+        /*if(lastOrder == -1){
+            lastOrderString = "";
+        }else{
+            lastOrderString = "Last order: 16/Sep/2017";
+        }*/
+        lastOrderString = "Last order: 16/Sep/2017";
 
-        GroupInnerViewAdapter adapter = new GroupInnerViewAdapter(context, members);
+        viewHolder.groupLastOrder.setText(lastOrderString);
+        viewHolder.groupPopulation.setText(String.format("(%s)", Integer.toString(members.get(position).size())));
+
+        GroupInnerViewAdapter adapter = new GroupInnerViewAdapter(context, members.get(position));
         viewHolder.groupMemberList.setAdapter(adapter);
         viewHolder.groupMemberList.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(MyApplication.getInstance(), LinearLayoutManager.HORIZONTAL, false);

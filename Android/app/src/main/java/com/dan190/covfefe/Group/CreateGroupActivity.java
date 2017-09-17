@@ -13,10 +13,14 @@ import android.widget.EditText;
 
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Models.Group;
+import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.R;
 import com.dan190.covfefe.Util.GroupUtils;
 import com.dan190.covfefe.Util.Logger;
 import com.dan190.covfefe.Util.MainSharedPreferences;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,6 +69,10 @@ public class CreateGroupActivity extends AppCompatActivity {
         }
 
         Group group = new Group(groupTitle);
+        String currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getSignOnId();
+        List<String> list = new ArrayList<>();
+        list.add(currentUser);
+        group.setMembers(list);
         String firebaseId = MainSharedPreferences.retrieveFirebaseId(MyApplication.getInstance());
 
         GroupUtils.start_group(group, firebaseId);

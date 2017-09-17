@@ -2,6 +2,7 @@ package com.dan190.covfefe.Group;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -47,17 +48,19 @@ public class GroupViewFragment extends Fragment {
     private static final String USER_PHOTO_URL = "photoUrl";
     private static final String USER_SIGN_ON_ID = "signOnId";
     private static final String USER_GROUPS = "groups";
+    private static final String USER_NAME = "name";
+    private static final String USER_EMAIL = "email";
 
     private static final String DATABASE_GROUPS = "groups";
-    private static final String DATABASE_USERS = "users";
+    private static final String DATABASE_USERS = "members";
     private static final String DATABASE_GROUP_NAME = "name";
     private static final String DATABASE_GROUP_CODE = "groupCode";
 
-    private List<User> users;
+    private List<List<User>> listListUser;
     private GroupViewAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
     private List<String> listOfGroups;
-    private List<String> listOfUsers;
+    private List<User> listOfUsers;
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -71,11 +74,21 @@ public class GroupViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_group_view, container, false);
         ButterKnife.bind(this, view);
 
-        users = new ArrayList<>();
+        listListUser = new ArrayList<>();
         listOfGroups = new ArrayList<>();
-        getMembers();
+        listOfUsers = new ArrayList<>();
+//        getMembers();
 
-        adapter = new GroupViewAdapter(getContext(), "Group1", -1, users);
+        User user1 = new User("Eric", "eric@gmail.com", null);
+        User user2 = new User("Sarah", "sarah@gmail.com", null);
+        User user3 = new User("Taylor", "taylor@gmail.com", null);
+        listOfUsers.add(user1);
+        listOfUsers.add(user2);
+        listOfUsers.add(user3);
+
+        listListUser.add(listOfUsers);
+
+        adapter = new GroupViewAdapter(getContext(), "Group1", -1, listListUser);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(MyApplication.getInstance(),
                 DividerItemDecoration.VERTICAL));
@@ -86,7 +99,9 @@ public class GroupViewFragment extends Fragment {
                     @Override
                     public void onClick(View view, int position) {
                         Log.d("recycler", "onclick at" + position);
-
+                        if(position == 0){
+                            startActivity(new Intent(MyApplication.getInstance(), GroupViewActivity.class));
+                        }
                     }
 
                     @Override
@@ -97,6 +112,12 @@ public class GroupViewFragment extends Fragment {
         ));
         linearLayoutManager = new LinearLayoutManager(MyApplication.getInstance());
         recyclerView.setLayoutManager(linearLayoutManager);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         return view;
     }
 
@@ -108,14 +129,21 @@ public class GroupViewFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot list: dataSnapshot.getChildren()){
                     Map<String, Object> map = ((Map<String, Object>) list.getValue());
-                    String signOnId = (String) map.get(USER_SIGN_ON_ID);
-                    if(signOnId.equals(MainSharedPreferences.retrieveEmailAuth(MyApplication.getInstance()))){
+                    String name = (String) map.get(USER_NAME);
+
+                    String email = (String) map.get(USER_EMAIL);
+
+                    User user = new User(name, email, null);
+                    listOfUsers.add(user);
+                    adapter.notifyDataSetChanged();
+
+                    /*if(name.equals("Dan")){
                         Map<String, Object> groups = (Map<String, Object>) map.get(USER_GROUPS);
                         Set<String> keySet = groups.keySet();
                         for(String key : keySet){
                             listOfGroups.add(key);
                         }
-                    }
+                    }*/
                 }
             }
 
@@ -125,7 +153,7 @@ public class GroupViewFragment extends Fragment {
             }
         });
 
-        Group group = null;
+        /*Group group = null;
         Set<String> userIds = null;
         DatabaseReference groups = MyApplication.getGlobalDB().getReference(DATABASE_GROUPS);
         groups.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -141,7 +169,7 @@ public class GroupViewFragment extends Fragment {
                         Set<String> keySet = users.keySet();
                         List<User> members = new ArrayList<User>();
                         for(String key : keySet){
-
+                            listOfUsers.add(key);
                         }
 
                     }
@@ -153,7 +181,7 @@ public class GroupViewFragment extends Fragment {
 
             }
         });
-
+*/
         return;
 
 

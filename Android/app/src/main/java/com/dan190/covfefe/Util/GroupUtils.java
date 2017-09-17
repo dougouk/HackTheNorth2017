@@ -77,17 +77,18 @@ public final class GroupUtils extends Activity {
 
     // Add group to user
     // Add user to group
-    public static void join_group(String group_code, String user_id){
+    public static void join_group(final String group_code, final String user_id){
 
-        DatabaseReference groupRef = get_group_using(group_code).child("users");
+
+        DatabaseReference groupRef = get_group_using(group_code).getRef();
         DatabaseReference userRef = MyApplication.getGlobalDB().getReference("users").child(user_id).child("groups");
 
         // add to group table
-        DatabaseReference newGroupUser = groupRef.child("users").push();
+        DatabaseReference newGroupUser = groupRef.push();
         newGroupUser.setValue(true);
 
         // add to user table
-        DatabaseReference newUserGroup = userRef.child("groups").push();
+        DatabaseReference newUserGroup = userRef.push();
         newUserGroup.setValue(userRef);
     }
 
@@ -97,7 +98,7 @@ public final class GroupUtils extends Activity {
 
         DatabaseReference groupRef = MyApplication.getGlobalDB().getReference("groups");
 
-        DatabaseReference wanted_group = groupRef.equalTo(group_code, "groupCode").getRef();
+        DatabaseReference wanted_group = groupRef.orderByChild("groupCode").equalTo(group_code).getRef();
 
         return wanted_group;
     }

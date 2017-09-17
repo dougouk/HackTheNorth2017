@@ -162,6 +162,9 @@ public class MainActivity extends AppCompatActivity
         }
         currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
         headerName.setText(currentUser.getDisplayName());
+
+        headerName.setText("Dan");
+        headerContactInfo.setText("dougouk@gmail.com");
     }
 
     @Override

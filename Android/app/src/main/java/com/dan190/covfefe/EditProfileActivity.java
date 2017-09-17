@@ -8,12 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Util.Logger;
@@ -32,11 +33,14 @@ import static android.view.View.GONE;
 public class EditProfileActivity extends AppCompatActivity {
     private static final String TAG = EditProfileActivity.class.getSimpleName();
 
-    @BindView(R.id.currentDisplayName)
-    TextView userId;
+    @BindView(R.id.displayName)
+    EditText displayName;
 
-    @BindView(R.id.newDisplayName)
-    EditText newNameEditText;
+    @BindView(R.id.email)
+    EditText email;
+
+    @BindView(R.id.password)
+    EditText password;
 
     @BindView(R.id.changeDisplayName)
     Button changeNameButton;
@@ -55,12 +59,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String userIdString = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getSignOnId();
         String username = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getDisplayName();
-        userId.setText(userIdString);
-        newNameEditText.setText(username);
+        displayName.setText(username);
 
-        newNameEditText.addTextChangedListener(textCounter);
+        displayName.addTextChangedListener(textCounter);
         changeNameButton.setEnabled(false);
     }
 
@@ -74,11 +76,18 @@ public class EditProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_profile_main, menu);
+        return true;
+    }
+
     @OnClick(R.id.changeDisplayName)
     public void changeName(){
         mainLayout.setAlpha(0.2f);
         progressBar.setVisibility(View.VISIBLE);
-        String newName = newNameEditText.getText().toString();
+        String newName = displayName.getText().toString();
         if(newName.equals("")){
             Logger.makeToast(getString(R.string.enter_new_display_name));
             return;
