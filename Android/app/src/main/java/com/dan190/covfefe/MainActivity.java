@@ -75,17 +75,21 @@ public class MainActivity extends AppCompatActivity
         // Initialization stuff
         loadSideMenu();
         setUpFAB();
+        loadGroupsFragment();
 
+
+        // Initialize Http Volley
+        queue = Volley.newRequestQueue(MyApplication.getInstance());
+
+    }
+
+    private void loadGroupsFragment() {
         // Load group view fragment into activity
         contentMain.findViewById(R.id.container);
         if(groupViewFragment == null){
             groupViewFragment = new GroupViewFragment();
         }
         getFragmentManager().beginTransaction().replace(R.id.container, groupViewFragment).commit();
-
-        // Initialize Http Volley
-        queue = Volley.newRequestQueue(MyApplication.getInstance());
-
     }
 
     private void setUpFAB() {
@@ -204,6 +208,10 @@ public class MainActivity extends AppCompatActivity
         }else if (id == R.id.nav_profile){
             // Edit profile
             startActivity(new Intent(MainActivity.this, EditProfileActivity.class));
+        }else if (id == R.id.nav_history){
+            // TODO
+        }else if (id == R.id.nav_groups){
+            loadGroupsFragment();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -223,6 +231,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void signOutAndFinish(){
+        MainSharedPreferences.logOut(MyApplication.getInstance());
         MyApplication.getFirebaseAuth().signOut();
         LoginManager.getInstance().logOut();
         finish();

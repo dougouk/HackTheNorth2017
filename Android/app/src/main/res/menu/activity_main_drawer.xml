@@ -9,12 +9,20 @@
     <item android:title="Settings">
         <menu>
             <item
+                android:id="@+id/nav_groups"
+                android:icon="@drawable/ic_mygroups"
+                android:title="Profile" />
+            <item
+                android:id="@+id/nav_history"
+                android:icon="@drawable/ic_pinghisty"
+                android:title="Profile" />
+            <item
                 android:id="@+id/nav_profile"
-                android:icon="@drawable/ic_person_black_24dp"
+                android:icon="@drawable/ic_accsettings"
                 android:title="Profile" />
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_exit_to_app_black_24dp"
+                android:icon="@drawable/ic_logout"
                 android:title="Log out" />
         </menu>
     </item>

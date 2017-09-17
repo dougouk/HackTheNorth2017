@@ -42,6 +42,10 @@ public class MainSharedPreferences {
         editor.remove(FB_ID);
         editor.remove(FB_NAME);
         editor.remove(EMAIL);
+        editor.remove(DISPLAY_NAME);
+        editor.remove(PHOTO_URL);
+        editor.remove(EMAIL_AUTH_ID);
+        editor.remove(FIREBASE_ID);
 
         return true;
     }
