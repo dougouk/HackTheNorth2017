@@ -17,6 +17,7 @@ import com.dan190.covfefe.Adapters.GroupViewAdapter;
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Listeners.RecyclerViewClickListener;
 import com.dan190.covfefe.Listeners.RecyclerViewOnTouchListener;
+import com.dan190.covfefe.Models.Group;
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.R;
 import com.dan190.covfefe.Util.GroupUtils;
@@ -30,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,10 +46,18 @@ public class GroupViewFragment extends Fragment {
     private static final String USER_DISPLAY_NAME = "displayName";
     private static final String USER_PHOTO_URL = "photoUrl";
     private static final String USER_SIGN_ON_ID = "signOnId";
+    private static final String USER_GROUPS = "groups";
+
+    private static final String DATABASE_GROUPS = "groups";
+    private static final String DATABASE_USERS = "users";
+    private static final String DATABASE_GROUP_NAME = "name";
+    private static final String DATABASE_GROUP_CODE = "groupCode";
 
     private List<User> users;
     private GroupViewAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
+    private List<String> listOfGroups;
+    private List<String> listOfUsers;
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -61,10 +71,9 @@ public class GroupViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_group_view, container, false);
         ButterKnife.bind(this, view);
 
-        Log.d(TAG, "Group fragment oncreate");
-        String groupkey = "1";
         users = new ArrayList<>();
-        getMembers(groupkey);
+        listOfGroups = new ArrayList<>();
+        getMembers();
 
         adapter = new GroupViewAdapter(getContext(), "Group1", -1, users);
         recyclerView.setAdapter(adapter);
@@ -91,28 +100,57 @@ public class GroupViewFragment extends Fragment {
         return view;
     }
 
-    private void getMembers(String groupKey){
+    private void getMembers(){
         DatabaseReference ref = MyApplication.getGlobalDB().getReference("user");
-//        String groupKey = (String) ref.child(MainSharedPreferences.retrieveFirebaseId(MyApplication.getInstance())).child("group").getKey();
 
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG, String.format("%d children", dataSnapshot.getChildrenCount()));
                 for(DataSnapshot list: dataSnapshot.getChildren()){
                     Map<String, Object> map = ((Map<String, Object>) list.getValue());
-                    String displayName = (String) map.get(USER_DISPLAY_NAME);
-                    String photoUrl = (String) map.get(USER_PHOTO_URL);
                     String signOnId = (String) map.get(USER_SIGN_ON_ID);
-                    User user = new User(displayName, signOnId, photoUrl, null);
-                    users.add(user);
-                    adapter.notifyDataSetChanged();
+                    if(signOnId.equals(MainSharedPreferences.retrieveEmailAuth(MyApplication.getInstance()))){
+                        Map<String, Object> groups = (Map<String, Object>) map.get(USER_GROUPS);
+                        Set<String> keySet = groups.keySet();
+                        for(String key : keySet){
+                            listOfGroups.add(key);
+                        }
+                    }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(TAG, "onCancelled");
+            }
+        });
+
+        Group group = null;
+        Set<String> userIds = null;
+        DatabaseReference groups = MyApplication.getGlobalDB().getReference(DATABASE_GROUPS);
+        groups.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot list: dataSnapshot.getChildren()){
+                    Log.d(TAG, list.getKey());
+                    if(listOfGroups.contains(list.getKey())){
+                        // Get list of users as a group
+                        Map<String, Object> groupMap = ((Map<String, Object>) list.getValue());
+                        String groupName = (String) groupMap.get(DATABASE_GROUP_NAME);
+                        Map<String, Object> users = ((Map<String, Object>) groupMap.get(DATABASE_USERS));
+                        Set<String> keySet = users.keySet();
+                        List<User> members = new ArrayList<User>();
+                        for(String key : keySet){
+
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 

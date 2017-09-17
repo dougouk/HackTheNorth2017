@@ -91,8 +91,7 @@ public class SignUpActivity extends AppCompatActivity {
                             FirebaseUser user = MyApplication.getFirebaseAuth().getCurrentUser();
                             String name = user.getDisplayName();
                             String id = user.getUid();
-                            String photoUrl = user.getPhotoUrl().toString();
-                            User newUser = new User(name, id, photoUrl, null);
+                            User newUser = new User(name, id, null);
                             MainSharedPreferences.emailLogin(MyApplication.getInstance(), newUser);
                             MainSharedPreferences.storeFirebasedId(MyApplication.getInstance(),
                                     GroupUtils.init_user(newUser));
