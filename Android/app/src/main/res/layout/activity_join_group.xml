@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/joinGroupTitle"
+        android:text="@string/join_group_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/joinGroupSubtitle"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:paddingBottom="15dp"
+        style="@style/LoginTitle"/>
+    <TextView
+        android:id="@+id/joinGroupSubtitle"
+        android:text="@string/join_group_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/joinGroupTitle"
+        app:layout_constraintBottom_toTopOf="@+id/joinGroupName"
+        android:paddingBottom="30dp"
+        style="@style/LoginSubtitle"/>
+    <EditText
+        android:id="@+id/joinGroupName"
+        style="@style/LoginEdit"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/joinGroupSubtitle"
+        app:layout_constraintBottom_toTopOf="@+id/joinGroupButton"/>
+    <Button
+        android:id="@+id/joinGroupButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/joinGroupName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="30dp"
+        android:text="@string/create"
+        android:enabled="false"
+        style="@style/LoginButton"/>
+
+</android.support.constraint.ConstraintLayout>

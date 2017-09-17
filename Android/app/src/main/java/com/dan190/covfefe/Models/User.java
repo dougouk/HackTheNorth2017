@@ -13,10 +13,9 @@ public class User {
     private String firebaseDbId;
     private FacebookAccount facebookAccount;
 
-    public User(String displayName, String signOnId, @Nullable String photoUrl, FacebookAccount facebookAccount) {
+    public User(String displayName, String signOnId, @Nullable FacebookAccount facebookAccount) {
         this.displayName = displayName;
         this.signOnId = signOnId;
-        this.photoUrl = photoUrl;
         this.facebookAccount = facebookAccount;
     }
 

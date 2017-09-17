@@ -3,9 +3,11 @@ package com.dan190.covfefe.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,9 +56,10 @@ public class GroupInnerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Log.d(TAG, "on bind inner holder");
         GroupInnerViewHolder viewHolder = (GroupInnerViewHolder) holder;
 
-        URL url = null;
+        /*URL url = null;
         try {
             url = new URL(members.get(position).getPhotoUrl());
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
@@ -65,7 +68,11 @@ public class GroupInnerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
+
+        Bitmap bmp = BitmapFactory.decodeResource(MyApplication.getInstance().getResources(),
+                R.drawable.userphoto);
+        viewHolder.imageView.setImageBitmap(bmp);
     }
 
     @Override

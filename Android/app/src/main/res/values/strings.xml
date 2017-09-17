@@ -30,4 +30,9 @@
     <string name="create">CREATE</string>
     <string name="group_name">Group name</string>
     <string name="fill_out_group_name">Group name cannot be empty! Give it a name</string>
+    <string name="group_joined">Group joined!</string>
+    <string name="group_join_failed">Failed to join group</string>
+    <string name="join_group_title">JOIN A GROUP</string>
+    <string name="join_group_subtitle">Please enter the group code</string>
+    <string name="send">SEND</string>
 </resources>

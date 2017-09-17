@@ -8,4 +8,5 @@
     <dimen name="login_btn_width">250dp</dimen>
     <dimen name="login_btn_height">50dp</dimen>
     <dimen name="edit_text_radius">25dp</dimen>
+    <dimen name="profile_edit_image_size">100dp</dimen>
 </resources>

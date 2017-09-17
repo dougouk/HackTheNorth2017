@@ -48,7 +48,7 @@ public class MyApplication extends Application {
                     String name = user.getDisplayName();
                     String id = user.getUid();
                     String photoUrl = "";
-                    User newUser = new User(name, id, photoUrl, null);
+                    User newUser = new User(name, id, null);
                     MainSharedPreferences.emailLogin(MyApplication.getInstance(), newUser);
 
                 }else{

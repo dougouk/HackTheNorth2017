@@ -12,42 +12,37 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.dan190.covfefe.ApplicationCore.MyApplication;
-import com.dan190.covfefe.Models.Group;
-import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.R;
 import com.dan190.covfefe.Util.GroupUtils;
 import com.dan190.covfefe.Util.Logger;
 import com.dan190.covfefe.Util.MainSharedPreferences;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Dan on 16/09/2017.
+ * Created by Dan on 17/09/2017.
  */
 
-public class CreateGroupActivity extends AppCompatActivity {
-    private static final String TAG = CreateGroupActivity.class.getSimpleName();
+public class JoinGroupActivity extends AppCompatActivity {
+    private static final String TAG = JoinGroupActivity.class.getSimpleName();
 
-    @BindView(R.id.createGroupName)
-    EditText createGroupName;
+    @BindView(R.id.joinGroupName)
+    EditText joinGroupName;
 
-    @BindView(R.id.createGroupButton)
-    Button createGroupButton;
+    @BindView(R.id.joinGroupButton)
+    Button joinGroupButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_new_group);
+        setContentView(R.layout.activity_join_group);
         ButterKnife.bind(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        createGroupName.addTextChangedListener(textCounter);
+        joinGroupName.addTextChangedListener(textCounter);
     }
 
     @Override
@@ -60,22 +55,17 @@ public class CreateGroupActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.createGroupButton)
-    public void createGroup(){
+    @OnClick(R.id.joinGroupButton)
+    public void joinGroup(){
         Log.d(TAG, "create group");
-        String groupTitle = createGroupName.getText().toString();
-        if(groupTitle.equals("")){
+        String groupCode = joinGroupName.getText().toString();
+        if(groupCode.equals("")){
             Logger.makeToast(getString(R.string.fill_out_group_name));
         }
 
-        Group group = new Group(groupTitle);
-        String currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getSignOnId();
-        List<String> list = new ArrayList<>();
-        list.add(currentUser);
-        group.setMembers(list);
-        String firebaseId = MainSharedPreferences.retrieveFirebaseId(MyApplication.getInstance());
-
-        GroupUtils.start_group(group, firebaseId);
+        GroupUtils.join_group(groupCode, MainSharedPreferences.retrieveFirebaseId(MyApplication.getInstance()));
+        Logger.makeToast(getString(R.string.group_joined));
+        finish();
     }
 
     private final TextWatcher textCounter = new TextWatcher() {
@@ -88,9 +78,9 @@ public class CreateGroupActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
             Log.d(TAG, String.format("Count: %d", count));
             if(count == 0){
-                createGroupButton.setEnabled(false);
+                joinGroupButton.setEnabled(false);
             }else if (count > 0){
-                createGroupButton.setEnabled(true);
+                joinGroupButton.setEnabled(true);
             }
         }
 
