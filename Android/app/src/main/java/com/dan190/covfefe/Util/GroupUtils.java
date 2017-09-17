@@ -79,8 +79,8 @@ public final class GroupUtils extends Activity {
     // Add user to group
     public static void join_group(String group_code, String user_id){
 
-        DatabaseReference groupRef = get_group_using(group_code);
-        DatabaseReference userRef = MyApplication.getGlobalDB().getReference("users").child(user_id);
+        DatabaseReference groupRef = get_group_using(group_code).child("users");
+        DatabaseReference userRef = MyApplication.getGlobalDB().getReference("users").child(user_id).child("groups");
 
         // add to group table
         DatabaseReference newGroupUser = groupRef.child("users").push();
