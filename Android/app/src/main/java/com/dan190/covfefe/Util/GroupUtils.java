@@ -18,6 +18,8 @@ public final class GroupUtils extends Activity {
 
     static FirebaseDatabase database = MyApplication.getInstance().getGlobalDB();
 
+    // NO GETTERS HERE, IT IS SUPPOSED TO BE LISTENER BASED
+
     // add user to db (called once per user)
     public static String init_user(User new_user){
 
@@ -71,7 +73,6 @@ public final class GroupUtils extends Activity {
     public static DatabaseReference get_group_using(String group_code){
 
         DatabaseReference groupRef = database.getReference("groups");
-
         DatabaseReference wanted_group = groupRef.equalTo("groupCode", group_code).getRef();
 
         return wanted_group;
