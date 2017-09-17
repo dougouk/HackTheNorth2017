@@ -32,6 +32,8 @@ public final class GroupUtils extends Activity {
 
 
 
+    // NO GETTERS HERE, IT IS SUPPOSED TO BE LISTENER BASED
+
     // add user to db (called once per user)
     public static String init_user(User new_user){
         Log.d(TAG, "init user");
@@ -81,12 +83,12 @@ public final class GroupUtils extends Activity {
         DatabaseReference userRef = MyApplication.getGlobalDB().getReference("users").child(user_id).child("groups");
 
         // add to group table
-        DatabaseReference newGroupUser = groupRef.push();
+        DatabaseReference newGroupUser = groupRef.child("users").push();
         newGroupUser.setValue(true);
 
         // add to user table
-        DatabaseReference newUserGroup = userRef.push();
-        newUserGroup.setValue(true);
+        DatabaseReference newUserGroup = userRef.child("groups").push();
+        newUserGroup.setValue(userRef);
     }
 
     //query group_id from group_code
