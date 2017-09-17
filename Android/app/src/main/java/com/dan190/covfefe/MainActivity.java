@@ -1,8 +1,6 @@
 package com.dan190.covfefe;
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.FragmentManager;
-import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -26,7 +24,6 @@ import com.dan190.covfefe.Group.GroupViewFragment;
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.Util.MainSharedPreferences;
-import com.dan190.covfefe.Util.MyAppApplication;
 import com.facebook.login.LoginManager;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -72,8 +69,6 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        MyAppApplication mApp = ((MyAppApplication) getApplicationContext());
 
         // Write a message to the database
         database = FirebaseDatabase.getInstance();

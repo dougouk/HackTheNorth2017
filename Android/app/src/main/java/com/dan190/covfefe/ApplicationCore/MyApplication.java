@@ -10,6 +10,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
@@ -25,6 +26,13 @@ public class MyApplication extends Application {
     private static MyApplication instance;
     private static FirebaseAuth auth;
     private static FirebaseAuth.AuthStateListener authStateListener;
+
+    private FirebaseDatabase mGlobalDB;
+
+    public FirebaseDatabase getGlobalDB() {
+        return mGlobalDB;
+    }
+
 
     @Override
     public void onCreate() {
@@ -72,5 +80,10 @@ public class MyApplication extends Application {
         auth.removeAuthStateListener(authStateListener);
         auth.signOut();
         LoginManager.getInstance().logOut();
+    }
+
+
+    public void setGlobalDB(FirebaseDatabase database) {
+        mGlobalDB = database;
     }
 }

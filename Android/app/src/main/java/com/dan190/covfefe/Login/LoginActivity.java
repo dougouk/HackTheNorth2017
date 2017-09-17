@@ -129,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
 
         signupMsg.setSpan(signupSpan, 23, 30, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         alternative.setText(signupMsg);
+    }
     @OnClick(R.id.signup)
     public void signUp(){
         startActivity(new Intent(LoginActivity.this, SignUpActivity.class));

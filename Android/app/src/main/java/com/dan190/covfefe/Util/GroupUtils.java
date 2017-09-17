@@ -2,6 +2,7 @@ package com.dan190.covfefe.Util;
 
 import android.app.Activity;
 
+import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Models.User;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -12,8 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class GroupUtils extends Activity {
 
-    MyAppApplication mApp = ((MyAppApplication)getApplicationContext());
-    FirebaseDatabase database = mApp.getGlobalDB();
+    FirebaseDatabase database = MyApplication.getInstance().getGlobalDB();
 
     public String init_user(User new_user){
 

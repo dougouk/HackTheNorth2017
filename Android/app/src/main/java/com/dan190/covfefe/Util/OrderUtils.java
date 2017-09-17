@@ -1,5 +1,6 @@
 package com.dan190.covfefe.Util;
 
+import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.google.firebase.database.FirebaseDatabase;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -10,7 +11,6 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class OrderUtils {
 
-    MyAppApplication mApp = ((MyAppApplication)getApplicationContext());
-    FirebaseDatabase database = mApp.getGlobalDB();
+    FirebaseDatabase database = MyApplication.getInstance().getGlobalDB();
 
 }
