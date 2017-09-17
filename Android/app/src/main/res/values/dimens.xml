@@ -6,4 +6,6 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="login_btn_width">250dp</dimen>
+    <dimen name="login_btn_height">50dp</dimen>
+    <dimen name="edit_text_radius">25dp</dimen>
 </resources>

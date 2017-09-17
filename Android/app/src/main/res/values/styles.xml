@@ -13,32 +13,61 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+    </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="LoginTextView">
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/colorTextColor</item>
+        <item name="android:fontFamily">avenir</item>
     </style>
 
     <style name="LoginTitle" parent="LoginTextView">
         <item name="android:textSize">24dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="LoginEdit" parent="LoginTextView">
+        <item name="android:layout_width">@dimen/login_btn_width</item>
+        <item name="android:layout_height">@dimen/login_btn_height</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">24dp</item>
         <item name="android:maxLines">1</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:background">@drawable/edit_text_background</item>
     </style>
 
     <style name="LoginSubtitle" parent="LoginTextView">
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">16dp</item>
     </style>
 
     <style name="LoginButton" parent="LoginTextView">
+        <item name="android:layout_width">@dimen/login_btn_width</item>
+        <item name="android:layout_height">@dimen/login_btn_height</item>
         <item name="android:textSize">20dp</item>
         <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:background">@drawable/btn_login</item>
     </style>
+
+    <style name="SplashTextView">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="SplashTitle" parent="SplashTextView">
+        <item name="android:textSize">28dp</item>
+        <item name="android:textColor">@color/colorTextColor</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SplashBottomText" parent="SplashTextView">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
 
 </resources>

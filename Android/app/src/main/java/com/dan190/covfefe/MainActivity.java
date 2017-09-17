@@ -1,10 +1,7 @@
 package com.dan190.covfefe;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.FragmentManager;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
@@ -13,39 +10,45 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.dan190.covfefe.ApplicationCore.MyApplication;
+import com.dan190.covfefe.Group.CreateGroupActivity;
 import com.dan190.covfefe.Group.GroupViewFragment;
 import com.dan190.covfefe.Models.FacebookAccount;
+import com.dan190.covfefe.Models.Group;
 import com.dan190.covfefe.Models.User;
+import com.dan190.covfefe.Util.GroupUtils;
 import com.dan190.covfefe.Util.MainSharedPreferences;
 import com.facebook.login.LoginManager;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity
     private User currentUser;
     private FrameLayout container;
     private GroupViewFragment groupViewFragment;
+    private EditText balance;
 
     private RequestQueue queue;
 
@@ -71,9 +75,13 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        balance=(EditText) findViewById(R.id.BalanceAmountTxt);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Groups");
 
+        // Initialization stuff
         loadSideMenu();
-
         setUpFAB();
 
         // Load group view fragment into activity
@@ -83,25 +91,48 @@ public class MainActivity extends AppCompatActivity
         }
         getFragmentManager().beginTransaction().replace(R.id.container, groupViewFragment).commit();
 
-        Log.d(TAG, String.format("Firebase token: %s", FirebaseInstanceId.getInstance().getToken()));
-
+        // Initialize Http Volley
         queue = Volley.newRequestQueue(MyApplication.getInstance());
 
+
+        RequestQueue getQ = Volley.newRequestQueue(this);
+        String url ="https://us-central1-hackthenorth2017-630f0.cloudfunctions.net/CheckforAccountBalance";
+        // text named balance that needs to be changed
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        balance.setText(response.substring(1,5));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                balance.setText("That didn't work!");
+            }
+        });
+        queue.add(stringRequest);
     }
 
     private void setUpFAB() {
         FloatingActionButton createGroup = new FloatingActionButton(MyApplication.getInstance());
-        createGroup.setIconDrawable(getDrawable(R.drawable.ic_add_circle_black_24dp));
+        createGroup.setIconDrawable(getDrawable(R.drawable.ic_shape));
+        createGroup.setColorNormal(R.color.colorTextColor);
+        createGroup.setColorPressed(R.color.colorPrimaryDark);
+
         createGroup.setEnabled(true);
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Create group clicked");
+                startActivity(new Intent(MainActivity.this, CreateGroupActivity.class));
             }
         });
 
         FloatingActionButton joinGroup = new FloatingActionButton(MyApplication.getInstance());
-        joinGroup.setIconDrawable(getDrawable(R.drawable.ic_exit_to_app_black_24dp));
+        joinGroup.setIconDrawable(getDrawable(R.drawable.ic_group));
+        joinGroup.setColorNormal(R.color.colorTextColor);
+        joinGroup.setColorPressed(R.color.colorPrimaryDark);
         joinGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,6 +169,7 @@ public class MainActivity extends AppCompatActivity
         });
         fab.addButton(createGroup);
         fab.addButton(joinGroup);
+        fab.addButton(cloudMessaging);
     }
 
     private void loadSideMenu() {
@@ -164,11 +196,10 @@ public class MainActivity extends AppCompatActivity
             case MainSharedPreferences.EMAIL_ACCOUNT:
                 currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
                 headerName.setText(currentUser.getDisplayName());
-                headerContactInfo.setText(currentUser.getEmail());
                 break;
             case MainSharedPreferences.FACEBOOK_ACCOUNT:
                 FacebookAccount facebookAccount = MainSharedPreferences.retrieveFacebookAccount(MyApplication.getInstance());
-                currentUser = new User(facebookAccount.getUsername(), null, null, null, facebookAccount);
+                currentUser = new User(facebookAccount.getUsername(), MyApplication.getFirebaseAuth().getCurrentUser().getUid(), null, facebookAccount);
                 headerName.setText(facebookAccount.getUsername());
                 headerContactInfo.setText("");
                 break;
@@ -179,7 +210,6 @@ public class MainActivity extends AppCompatActivity
         }
         currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance());
         headerName.setText(currentUser.getDisplayName());
-        headerContactInfo.setText(currentUser.getEmail());
     }
 
     @Override

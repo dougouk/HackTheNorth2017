@@ -10,6 +10,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
@@ -26,6 +27,10 @@ public class MyApplication extends Application {
     private static FirebaseAuth auth;
     private static FirebaseAuth.AuthStateListener authStateListener;
 
+    private static FirebaseDatabase mGlobalDB;
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,10 +46,9 @@ public class MyApplication extends Application {
                     // Signed in
                     Log.i(TAG, "User signed in");
                     String name = user.getDisplayName();
-                    String email = user.getEmail();
                     String id = user.getUid();
                     String photoUrl = "";
-                    User newUser = new User(name, email, id, photoUrl, null);
+                    User newUser = new User(name, id, photoUrl, null);
                     MainSharedPreferences.emailLogin(MyApplication.getInstance(), newUser);
 
                 }else{
@@ -57,6 +61,7 @@ public class MyApplication extends Application {
         };
         MyApplication.getFirebaseAuth().addAuthStateListener(authStateListener);
 
+        mGlobalDB = FirebaseDatabase.getInstance();
     }
 
 
@@ -67,6 +72,15 @@ public class MyApplication extends Application {
     public static FirebaseAuth getFirebaseAuth(){
         return auth;
     }
+
+    public static void setGlobalDB(FirebaseDatabase database) {
+        mGlobalDB = database;
+    }
+
+    public static FirebaseDatabase getGlobalDB() {
+        return mGlobalDB;
+    }
+
 
     private void signOutAndFinish(){
         auth.removeAuthStateListener(authStateListener);

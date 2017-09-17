@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +35,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONObject;
 
@@ -71,12 +75,20 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.loginComponents)
     ConstraintLayout mainLayout;
 
+    @BindView(R.id.loginAlternative)
+    TextView alternative;
+
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         progressBar.setVisibility(View.INVISIBLE);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         facebookLogin.setReadPermissions("email");
         // Other app specific specialization
@@ -110,17 +122,22 @@ public class LoginActivity extends AppCompatActivity {
         ClickableSpan signupSpan = new ClickableSpan() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "clicked span text");
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }
         };
 
         signupMsg.setSpan(signupSpan, 23, 30, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        alternative.setText(signupMsg);
+    }
+    @OnClick(R.id.signup)
+    public void signUp(){
+        startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
     }
 
 
     @OnClick(R.id.login)
     public void login(){
-        verifyForm();
         String email = username.getText().toString();
         String pass = password.getText().toString();
 
@@ -150,10 +167,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void verifyForm(){
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -163,6 +176,16 @@ public class LoginActivity extends AppCompatActivity {
 
         // Pass the activity result back to the Facebook SDK
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void handleFacebookAccessToken(final AccessToken accessToken){
