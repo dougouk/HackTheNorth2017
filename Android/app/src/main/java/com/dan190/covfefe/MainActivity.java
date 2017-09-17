@@ -1,8 +1,8 @@
 package com.dan190.covfefe;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.FragmentManager;
+import android.app.Application;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -31,6 +31,7 @@ import com.dan190.covfefe.Group.GroupViewFragment;
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.Util.MainSharedPreferences;
+import com.dan190.covfefe.Util.MyAppApplication;
 import com.facebook.login.LoginManager;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -47,6 +48,8 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -66,12 +69,24 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.content_main)
     ConstraintLayout contentMain;
+    // Write a message to the database
+    FirebaseDatabase database;
+    DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        MyAppApplication mApp = ((MyAppApplication) getApplicationContext());
+
+        // Write a message to the database
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("message");
+
 
         loadSideMenu();
 

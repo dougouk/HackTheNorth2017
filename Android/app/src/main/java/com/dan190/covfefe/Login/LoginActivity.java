@@ -35,6 +35,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONObject;
 
@@ -72,6 +74,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.loginComponents)
     ConstraintLayout mainLayout;
+
+    FirebaseDatabase database;
+    DatabaseReference myRef;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,6 +124,9 @@ public class LoginActivity extends AppCompatActivity {
         };
 
         signupMsg.setSpan(signupSpan, 23, 30, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    @OnClick(R.id.signup)
+    public void signUp(){
+        startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
     }
 
 
