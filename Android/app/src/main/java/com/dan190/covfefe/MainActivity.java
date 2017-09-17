@@ -21,6 +21,7 @@ import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Models.FacebookAccount;
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.Util.MainSharedPreferences;
+import com.dan190.covfefe.Util.MyAppApplication;
 import com.facebook.login.LoginManager;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -48,8 +49,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        MyDatabase mApp = ((MyDatabase)getApplicationContext());
-        String globalVarValue = mApp.getGlobalVal();
+        MyAppApplication mApp = ((MyAppApplication) getApplicationContext());
 
         // Write a message to the database
         database = FirebaseDatabase.getInstance();
@@ -186,17 +186,5 @@ public class MainActivity extends AppCompatActivity
         MyApplication.getFirebaseAuth().signOut();
         LoginManager.getInstance().logOut();
         finish();
-    }
-}
-
-class MyDatabase extends Application {
-    private String mGlobalVal;
-
-    public String getGlobalVal() {
-        return mGlobalVal;
-    }
-
-    public void setGlobalVal(String str) {
-        mGlobalVal = str;
     }
 }
