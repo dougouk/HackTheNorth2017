@@ -4,3 +4,5 @@ Android/gradlew\.bat
 Android/gradlew
 
 Android/\.idea/misc\.xml
+
+Android/app/src/main/res/values/o_auth_key_dan\.xml
