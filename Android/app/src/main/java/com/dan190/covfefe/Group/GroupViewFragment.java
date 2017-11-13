@@ -22,6 +22,7 @@ import com.dan190.covfefe.Models.Group;
 import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.R;
 import com.dan190.covfefe.Util.GroupUtils;
+import com.dan190.covfefe.Util.Keys;
 import com.dan190.covfefe.Util.MainSharedPreferences;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,18 +45,6 @@ import butterknife.ButterKnife;
 public class GroupViewFragment extends Fragment {
     private static final String TAG = GroupViewFragment.class.getSimpleName();
 
-    private static final String USER_DISPLAY_NAME = "displayName";
-    private static final String USER_PHOTO_URL = "photoUrl";
-    private static final String USER_SIGN_ON_ID = "signOnId";
-    private static final String USER_GROUPS = "groups";
-    private static final String USER_NAME = "name";
-    private static final String USER_EMAIL = "email";
-
-    private static final String DATABASE_GROUPS = "groups";
-    private static final String DATABASE_USERS = "members";
-    private static final String DATABASE_GROUP_NAME = "name";
-    private static final String DATABASE_GROUP_CODE = "groupCode";
-
     private List<List<User>> listListUser;
     private GroupViewAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
@@ -77,14 +66,9 @@ public class GroupViewFragment extends Fragment {
         listListUser = new ArrayList<>();
         listOfGroups = new ArrayList<>();
         listOfUsers = new ArrayList<>();
-//        getMembers();
+        getMembers();
 
-        User user1 = new User("Eric", "eric@gmail.com", null);
-        User user2 = new User("Sarah", "sarah@gmail.com", null);
-        User user3 = new User("Taylor", "taylor@gmail.com", null);
-        listOfUsers.add(user1);
-        listOfUsers.add(user2);
-        listOfUsers.add(user3);
+        loadGroups();
 
         listListUser.add(listOfUsers);
 
@@ -112,13 +96,44 @@ public class GroupViewFragment extends Fragment {
         ));
         linearLayoutManager = new LinearLayoutManager(MyApplication.getInstance());
         recyclerView.setLayoutManager(linearLayoutManager);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            loadGroups();
         });
         return view;
+    }
+
+    private void loadGroups() {
+        // TODO get list of groups this user is in
+        DatabaseReference ref = MyApplication.getGlobalDB().getReference(Keys.USERS);
+        String firebaseID = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getFirebaseDbId();
+        String currentSignOnId = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getSignOnId();
+
+        Log.i(TAG, "Current id is " + currentSignOnId);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String signOnId = (String) snapshot.child(Keys.USER_SIGN_ON_ID).getValue();
+                    Log.d(TAG, "comparing against " + signOnId);
+                    if (signOnId.equals(currentSignOnId)) {
+                        DataSnapshot groups = snapshot.child(Keys.DATABASE_GROUPS);
+                        for (DataSnapshot group : groups.getChildren()) {
+                            Log.i(TAG, group.getKey());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        // TODO get list of members of each group
+
+        // TODO Load the lists into the adapter
+
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void getMembers(){
@@ -130,9 +145,9 @@ public class GroupViewFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot list: dataSnapshot.getChildren()){
                     Map<String, Object> map = ((Map<String, Object>) list.getValue());
-                    String name = (String) map.get(USER_NAME);
+                    String name = (String) map.get(Keys.USER_NAME);
 
-                    String email = (String) map.get(USER_EMAIL);
+                    String email = (String) map.get(Keys.USER_EMAIL);
 
                     User user = new User(name, email, null);
                     listOfUsers.add(user);

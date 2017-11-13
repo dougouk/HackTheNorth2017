@@ -69,7 +69,7 @@ public class GroupViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder");
-        Log.d(TAG, String.format("name %s", members.get(position).get(position).getDisplayName()));
+//        Log.d(TAG, String.format("name %s", members.get(position).get(position).getDisplayName()));
         GroupViewHolder viewHolder = (GroupViewHolder) holder;
         viewHolder.groupName.setText("Group 1");
         String lastOrderString = null;

@@ -29,27 +29,14 @@ import com.dan190.covfefe.Group.CreateGroupActivity;
 import com.dan190.covfefe.Group.GroupViewFragment;
 import com.dan190.covfefe.Group.JoinGroupActivity;
 import com.dan190.covfefe.Models.FacebookAccount;
-import com.dan190.covfefe.Models.Group;
 import com.dan190.covfefe.Models.User;
-import com.dan190.covfefe.Util.GroupUtils;
 import com.dan190.covfefe.Util.MainSharedPreferences;
 import com.facebook.login.LoginManager;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -76,8 +63,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        balance=(EditText) findViewById(R.id.BalanceAmountTxt);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        balance = findViewById(R.id.BalanceAmountTxt);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Groups");
 
@@ -86,10 +73,8 @@ public class MainActivity extends AppCompatActivity
         setUpFAB();
         loadGroupsFragment();
 
-
         // Initialize Http Volley
         queue = Volley.newRequestQueue(MyApplication.getInstance());
-
     }
 
     private void loadGroupsFragment() {
@@ -103,7 +88,6 @@ public class MainActivity extends AppCompatActivity
         // Initialize Http Volley
         queue = Volley.newRequestQueue(MyApplication.getInstance());
 
-
         RequestQueue getQ = Volley.newRequestQueue(this);
         String url ="https://us-central1-hackthenorth2017-630f0.cloudfunctions.net/CheckforAccountBalance";
         // text named balance that needs to be changed
@@ -111,7 +95,7 @@ public class MainActivity extends AppCompatActivity
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
+                        // Display the first 5 characters of the response string.
                         balance.setText(response.substring(1,5));
                     }
                 }, new Response.ErrorListener() {
@@ -168,8 +152,8 @@ public class MainActivity extends AppCompatActivity
 
         // Set username, email and profile picture
         View headerView = navigationView.getHeaderView(0);
-        headerName = (TextView) headerView.findViewById(R.id.name);
-        headerContactInfo = (TextView) headerView.findViewById(R.id.contactInfo);
+        headerName = headerView.findViewById(R.id.name);
+        headerContactInfo = headerView.findViewById(R.id.contactInfo);
 
         switch(MainSharedPreferences.retrieveAccountType(MyApplication.getInstance())){
             case 0:
@@ -223,9 +207,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

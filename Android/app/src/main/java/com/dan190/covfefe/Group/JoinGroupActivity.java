@@ -63,7 +63,7 @@ public class JoinGroupActivity extends AppCompatActivity {
             Logger.makeToast(getString(R.string.fill_out_group_name));
         }
 
-        GroupUtils.join_group(groupCode, MainSharedPreferences.retrieveFirebaseId(MyApplication.getInstance()));
+        GroupUtils.updateGroupsAndUsers(groupCode, MainSharedPreferences.retrieveFirebaseId(MyApplication.getInstance()));
         Logger.makeToast(getString(R.string.group_joined));
         finish();
     }

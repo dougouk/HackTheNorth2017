@@ -44,7 +44,7 @@ public class GroupInnerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public GroupInnerViewHolder(View itemView){
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.image);
+            imageView = itemView.findViewById(R.id.image);
         }
     }
 

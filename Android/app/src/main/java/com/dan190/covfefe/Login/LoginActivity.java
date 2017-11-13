@@ -218,8 +218,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void proceed(){
-
-
         startActivity(new Intent(LoginActivity.this, AllowLocationActivity.class));
         finish();
     }

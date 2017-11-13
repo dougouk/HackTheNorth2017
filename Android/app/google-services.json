@@ -15,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "494344200940-nkvojv2dns0jc5tm7ko1fphl5q92qjpq.apps.googleusercontent.com",
+          "client_id": "494344200940-ks54m5fkpbsluohkompahj9njkkcn8lk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dan190.covfefe",
@@ -23,13 +23,24 @@
           }
         },
         {
-          "client_id": "494344200940-k6jl26dkqlm4jhpce348m0tivhc84sh9.apps.googleusercontent.com",
+          "client_id": "494344200940-32el27oha61gu945n08qji5me21bdtk1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dan190.covfefe",
+            "certificate_hash": "1529c7e3631ec3e11d3f4db80a8c253fda95d2e4"
+          }
+        },
+        {
+          "client_id": "494344200940-n4s0aphii4nujsmoauhhemqkkjuta5i7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
           "current_key": "AIzaSyB9Yf6cWzajWf87bWeSgQD_WtmBKOpXee4"
+        },
+        {
+          "current_key": "AIzaSyBdL7LgEUrrQUUuBhOMWxKQ0iH49KNfolE"
         }
       ],
       "services": {
@@ -40,7 +51,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "494344200940-k6jl26dkqlm4jhpce348m0tivhc84sh9.apps.googleusercontent.com",
+              "client_id": "494344200940-n4s0aphii4nujsmoauhhemqkkjuta5i7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

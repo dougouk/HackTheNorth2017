@@ -13,7 +13,6 @@ import android.widget.EditText;
 
 import com.dan190.covfefe.ApplicationCore.MyApplication;
 import com.dan190.covfefe.Models.Group;
-import com.dan190.covfefe.Models.User;
 import com.dan190.covfefe.R;
 import com.dan190.covfefe.Util.GroupUtils;
 import com.dan190.covfefe.Util.Logger;
@@ -69,13 +68,13 @@ public class CreateGroupActivity extends AppCompatActivity {
         }
 
         Group group = new Group(groupTitle);
-        String currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getSignOnId();
+        String currentUser = MainSharedPreferences.retrieveUser(MyApplication.getInstance()).getFirebaseDbId();
         List<String> list = new ArrayList<>();
         list.add(currentUser);
         group.setMembers(list);
         String firebaseId = MainSharedPreferences.retrieveFirebaseId(MyApplication.getInstance());
 
-        GroupUtils.start_group(group, firebaseId);
+        GroupUtils.initializeGroup(group, firebaseId);
     }
 
     private final TextWatcher textCounter = new TextWatcher() {

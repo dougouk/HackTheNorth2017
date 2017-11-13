@@ -94,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
                             User newUser = new User(name, id, null);
                             MainSharedPreferences.emailLogin(MyApplication.getInstance(), newUser);
                             MainSharedPreferences.storeFirebasedId(MyApplication.getInstance(),
-                                    GroupUtils.init_user(newUser));
+                                    GroupUtils.initUser(newUser));
                             startActivity(new Intent(SignUpActivity.this, AllowLocationActivity.class));
 
                         }else{

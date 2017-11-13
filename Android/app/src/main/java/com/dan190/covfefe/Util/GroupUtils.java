@@ -9,13 +9,11 @@ import com.dan190.covfefe.Models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import java.util.Random;
 
@@ -35,7 +33,7 @@ public final class GroupUtils extends Activity {
     // NO GETTERS HERE, IT IS SUPPOSED TO BE LISTENER BASED
 
     // add user to db (called once per user)
-    public static String init_user(User new_user){
+    public static String initUser(User new_user){
         Log.d(TAG, "init user");
 
         DatabaseReference usersRef = MyApplication.getGlobalDB().getReference("users");
@@ -58,49 +56,77 @@ public final class GroupUtils extends Activity {
     /*
         Create a group with the given name
      */
-    public static String start_group(Group new_group, String user_id){
+    public static String initializeGroup(Group newGroup, String userId){
         DatabaseReference groupsRef = MyApplication.getGlobalDB().getReference("groups");
 
         DatabaseReference newGroupRef = groupsRef.push();
 
         // generate random group code
-        String group_code = random();
-        new_group.setGroupCode(group_code);
-        newGroupRef.setValue(new_group);
+        String groupCode = random();
+        newGroup.setGroupCode(groupCode);
+        newGroupRef.setValue(newGroup);
 
         String group_id = newGroupRef.getKey();
 
-        join_group(group_code, user_id);
+        updateGroupsAndUsers(groupCode, userId);
 
         return group_id;
     }
 
     // Add group to user
     // Add user to group
-    public static void join_group(final String group_code, final String user_id){
+    public static void updateGroupsAndUsers(final String group_code, final String user_id){
 
-
-        DatabaseReference groupRef = get_group_using(group_code).getRef();
-        DatabaseReference userRef = MyApplication.getGlobalDB().getReference("users").child(user_id).child("groups");
-
-        // add to group table
-        DatabaseReference newGroupUser = groupRef.push();
-        newGroupUser.setValue(true);
-
-        // add to user table
-        DatabaseReference newUserGroup = userRef.push();
-        newUserGroup.setValue(userRef);
-    }
-
-    //query group_id from group_code
-    // Given the group code, looks it up and returns a reference to the group
-    public static DatabaseReference get_group_using(String group_code){
-
+        // Add the member to the group
         DatabaseReference groupRef = MyApplication.getGlobalDB().getReference("groups");
+        groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, String.format("%d children", dataSnapshot.getChildrenCount()));
+                for (DataSnapshot keys : dataSnapshot.getChildren()) {
+                    if (keys.child("groupCode").getValue().toString().equals(group_code)) {
+                        DatabaseReference group = keys.getRef();
+                        DatabaseReference members = group.child("members");
+                        if (members == null) {
+                            group.child("members").child(user_id).setValue(true);
+                        } else {
+                            members.getRef().child(user_id).setValue(true);
+                        }
+                    } else {
+                        Log.e(TAG, String.format("no maching group found for %s", group_code));
+                    }
+                }
+            }
 
-        DatabaseReference wanted_group = groupRef.orderByChild("groupCode").equalTo(group_code).getRef();
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, String.format("Error in adding member to group: %s", databaseError.toString()));
+            }
+        });
 
-        return wanted_group;
+        DatabaseReference usersRef = MyApplication.getGlobalDB().getReference("users");
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, String.format("%d children", dataSnapshot.getChildrenCount()));
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (snapshot.getKey().equals(user_id)){
+                        DatabaseReference user = snapshot.getRef();
+                        DatabaseReference groups = user.child("groups");
+                        if (groups == null) {
+                            user.child("groups").child(group_code).setValue(true);
+                        } else {
+                            groups.child(group_code).setValue(true);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, String.format("Error in adding member to group: %s", databaseError.toString()));
+            }
+        });
     }
 
     // helper funcs
